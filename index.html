@@ -74,14 +74,129 @@
   .trim-line{color:#8a4a22}
   .mine-note{margin-top:8px;padding-top:8px;border-top:1px dashed var(--line);color:var(--muted);font-size:.8rem}
   .mine-empty{color:var(--muted);font-style:italic}
+
+  /* ===== faner ===== */
+  .tabbar{background:var(--green-d);position:sticky;top:0;z-index:40}
+  .tabs{display:flex;gap:2px;max-width:1200px;margin:0 auto;padding:0 12px;overflow-x:auto}
+  .tabbtn{appearance:none;border:none;background:transparent;color:#cfe3d7;font:inherit;font-weight:600;font-size:.9rem;
+    padding:13px 18px;cursor:pointer;border-bottom:3px solid transparent;letter-spacing:.2px;transition:.12s;white-space:nowrap}
+  .tabbtn:hover{color:#fff;background:rgba(255,255,255,.06)}
+  .tabbtn.active{color:#fff;border-bottom-color:var(--terra);background:rgba(255,255,255,.08)}
+  .tab-panel{display:none}
+  .tab-panel.active{display:block}
+  #tab-ugeplan .panel{top:70px}
+  .panelpad{max-width:1200px;margin:0 auto;padding:24px}
+
+  /* ===== opskrifter ===== */
+  .rcp-controls{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:18px}
+  .pills{display:flex;flex-wrap:wrap;gap:6px}
+  .pill{appearance:none;border:1px solid var(--line);background:var(--card);color:var(--muted);font:inherit;font-size:.8rem;
+    font-weight:600;padding:6px 13px;border-radius:999px;cursor:pointer;transition:.12s}
+  .pill:hover{border-color:var(--green);color:var(--green)}
+  .pill.on{background:var(--green);border-color:var(--green);color:#fff}
+  .search{flex:1;min-width:190px;border:1px solid var(--line);border-radius:10px;padding:9px 13px;font:inherit;font-size:.9rem;background:var(--card)}
+  .search:focus{outline:none;border-color:var(--green);box-shadow:0 0 0 3px rgba(46,107,79,.12)}
+  .rcp-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(228px,1fr));gap:12px}
+  .rcp-card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:13px 14px;cursor:pointer;
+    transition:.12s;display:flex;flex-direction:column;gap:7px;min-height:118px;position:relative}
+  .rcp-card:hover{border-color:var(--green);box-shadow:0 2px 10px rgba(46,107,79,.10);transform:translateY(-1px)}
+  .rcp-card.sel{border-color:var(--green);background:var(--sage)}
+  .rcp-slot{font-size:.6rem;text-transform:uppercase;letter-spacing:1px;font-weight:700;color:var(--green)}
+  .rcp-dyr{color:var(--terra)}
+  .rcp-name{font-weight:700;font-size:.98rem;line-height:1.25;color:var(--ink);padding-right:24px}
+  .rcp-mini{font-size:.72rem;color:var(--muted);display:flex;flex-wrap:wrap;gap:3px 10px;margin-top:auto}
+  .rcp-check{position:absolute;top:11px;right:11px;width:20px;height:20px;accent-color:var(--green);cursor:pointer;flex:none}
+  .rcp-none{grid-column:1/-1;text-align:center;color:var(--muted);font-style:italic;padding:34px 0}
+
+  /* ===== modal (opskrift) ===== */
+  .modal-back{position:fixed;inset:0;background:rgba(28,38,33,.55);display:flex;align-items:flex-start;justify-content:center;
+    padding:28px 16px;z-index:100;overflow-y:auto;opacity:0;pointer-events:none;transition:opacity .15s}
+  .modal-back.show{opacity:1;pointer-events:auto}
+  .modal{background:var(--cream);border-radius:16px;max-width:640px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.32);
+    overflow:hidden;margin:auto}
+  .modal-hd{background:var(--green);color:#fff;padding:18px 22px;position:relative}
+  .modal-hd .slot{font-size:.64rem;text-transform:uppercase;letter-spacing:1.5px;opacity:.85;font-weight:700}
+  .modal-hd h3{margin:5px 0 0;font-size:1.2rem;line-height:1.3;padding-right:36px}
+  .modal-x{position:absolute;top:14px;right:14px;width:30px;height:30px;border-radius:8px;border:none;
+    background:rgba(255,255,255,.16);color:#fff;font-size:1rem;cursor:pointer;line-height:1}
+  .modal-x:hover{background:rgba(255,255,255,.3)}
+  .modal-bd{padding:18px 22px 22px}
+  .modal-sel{display:flex;align-items:center;gap:10px;background:#fff;border:1px solid var(--line);border-radius:10px;
+    padding:11px 13px;margin-bottom:16px;font-size:.9rem;font-weight:600;color:var(--ink);cursor:pointer}
+  .modal-sel input{width:20px;height:20px;accent-color:var(--green);cursor:pointer}
+  .modal-stats{display:flex;flex-wrap:wrap;gap:6px 7px;margin-bottom:18px}
+  .chip{font-size:.72rem;font-weight:700;padding:4px 10px;border-radius:999px;background:var(--sage);color:var(--green-d);border:1px solid #cfe3d7}
+  .msec{margin-bottom:16px}
+  .msec:last-child{margin-bottom:0}
+  .msec h5{font-size:.72rem;text-transform:uppercase;letter-spacing:1.2px;color:var(--green);margin:0 0 8px;
+    border-bottom:2px solid var(--sage);padding-bottom:5px}
+  .ming{list-style:none;margin:0;padding:0}
+  .ming li{padding:5px 0 5px 20px;position:relative;font-size:.9rem;border-bottom:1px dashed var(--line)}
+  .ming li:last-child{border-bottom:none}
+  .ming li:before{content:"";position:absolute;left:3px;top:12px;width:6px;height:6px;border-radius:50%;background:var(--terra)}
+  .msteps{margin:0;padding:0;list-style:none;counter-reset:s}
+  .msteps li{counter-increment:s;position:relative;padding:6px 0 8px 36px;font-size:.92rem;line-height:1.5}
+  .msteps li:before{content:counter(s);position:absolute;left:0;top:4px;width:24px;height:24px;border-radius:50%;
+    background:var(--green);color:#fff;font-size:.75rem;font-weight:700;display:flex;align-items:center;justify-content:center}
+  .msteps b,.mnote b,.mbarn b{color:var(--green-d)}
+  .mbarn{background:var(--sage);border-radius:10px;padding:11px 13px;font-size:.88rem;line-height:1.5}
+  .mnote{background:#fff;border:1px solid var(--line);border-left:4px solid var(--terra);border-radius:10px;
+    padding:10px 13px;font-size:.86rem;line-height:1.5;margin-bottom:8px}
+  .mnote:last-child{margin-bottom:0}
+  .mnote b{color:#8a4a22}
+  .mkryds{font-size:.82rem;color:var(--muted);line-height:1.5}
+
+  /* ===== indkøbsliste (redigerbar) ===== */
+  .shop-controls{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:16px}
+  .shop-controls .spacer{flex:1;min-width:8px}
+  .chk-inline{font-size:.82rem;color:var(--muted);display:flex;align-items:center;gap:6px;cursor:pointer}
+  .chk-inline input{accent-color:var(--green);cursor:pointer}
+  .addrow{display:flex;flex-wrap:wrap;gap:8px;align-items:center;background:var(--card);border:1px solid var(--line);
+    border-radius:12px;padding:12px 14px;margin-bottom:14px}
+  .addrow:focus-within{border-color:var(--green)}
+  .addrow input,.addrow select{font:inherit;font-size:.9rem;border:1px solid var(--line);border-radius:9px;padding:8px 10px;background:#fff;color:var(--ink)}
+  .addrow input:focus,.addrow select:focus{outline:none;border-color:var(--green)}
+  .addrow input.n{flex:2;min-width:150px}
+  .addrow input.q{width:120px;flex:none}
+  .addrow select{min-width:150px}
+  .shopcount{font-size:.8rem;color:var(--muted);margin:0 2px 12px}
+  .shop-empty{color:var(--muted);font-style:italic;text-align:center;padding:30px 20px;background:var(--card);
+    border:1px dashed var(--line);border-radius:12px}
+  .shop-cat{margin-bottom:16px}
+  .shop-cat>h4{font-size:.74rem;text-transform:uppercase;letter-spacing:1.2px;color:var(--green);margin:0 0 7px;display:flex;gap:8px;align-items:center}
+  .srow{display:flex;align-items:center;gap:11px;background:var(--card);border:1px solid var(--line);border-radius:10px;
+    padding:8px 12px;margin-bottom:6px}
+  .srow input[type=checkbox]{width:18px;height:18px;accent-color:var(--green);flex:none;cursor:pointer}
+  .srow .sn{flex:1;font-size:.92rem;font-weight:600;color:var(--ink)}
+  .srow.done .sn{text-decoration:line-through;color:var(--muted);font-weight:500}
+  .srow .ex{font-size:.56rem;text-transform:uppercase;letter-spacing:.5px;font-weight:700;color:#8a4a22;
+    background:#F6E7DA;border:1px solid #e6c9ad;border-radius:999px;padding:2px 7px;flex:none}
+  .srow .sq{width:120px;flex:none;font:inherit;font-size:.85rem;border:1px solid transparent;border-radius:7px;padding:4px 8px;
+    background:transparent;color:var(--muted);text-align:right}
+  .srow .sq:focus{outline:none;border-color:var(--line);background:#fff;color:var(--ink)}
+  .srow .del{appearance:none;border:none;background:transparent;color:var(--muted);cursor:pointer;font-size:1rem;
+    line-height:1;padding:3px 5px;border-radius:6px;flex:none}
+  .srow .del:hover{color:var(--tomato);background:#fbe9e7}
+  @media(max-width:560px){
+    .srow .sq{width:88px}
+    .addrow input.q,.addrow select,.addrow input.n{flex:1 1 100%;width:auto;min-width:0}
+  }
 </style>
 </head>
 <body>
 <header>
   <h1>Madplanen · Indkøbsdashboard</h1>
-  <p>Sæt kryds ved ugens retter — indkøbslisten samler og sorterer sig selv efter butiksruten.</p>
+  <p>Vælg ugens retter · slå opskrifterne op · tag indkøbslisten med i butikken.</p>
 </header>
 
+<div class="tabbar"><nav class="tabs">
+  <button class="tabbtn active" data-tab="ugeplan">Ugeplan</button>
+  <button class="tabbtn" data-tab="opskrifter">Opskrifter</button>
+  <button class="tabbtn" data-tab="indkob">Indkøbsliste</button>
+</nav></div>
+
+<main>
+<div id="tab-ugeplan" class="tab-panel active">
 <div class="wrap">
   <section>
     <h2>Vælg ugens retter</h2>
@@ -120,6 +235,43 @@
   </aside>
 </div>
 <div class="foot">Dyr protein tæller op mod 2/uge · aftensbudget 1.010 kr · basisvarer skjules som standard (de står i Basisvarelager-noten).</div>
+</div><!-- /tab-ugeplan -->
+
+<div id="tab-opskrifter" class="tab-panel">
+  <div class="panelpad">
+    <div class="rcp-controls">
+      <div class="pills" id="rcpPills"></div>
+      <input class="search" id="rcpSearch" type="search" placeholder="Søg ret eller råvare…">
+    </div>
+    <div class="rcp-grid" id="rcpGrid"></div>
+  </div>
+</div>
+
+<div id="tab-indkob" class="tab-panel">
+  <div class="panelpad">
+    <div class="shop-controls">
+      <button class="primary" id="overBtn">Overfør ugens varer</button>
+      <label class="chk-inline"><input type="checkbox" id="shopPantry"> Tag basisvarer med</label>
+      <span class="spacer"></span>
+      <button id="copyShopBtn">Kopiér liste</button>
+      <button id="uncheckBtn">Ryd afkrydsning</button>
+      <button id="emptyBtn">Tøm liste</button>
+    </div>
+    <div class="addrow">
+      <input class="n" id="addN" placeholder="Tilføj vare (fx havregryn)">
+      <input class="q" id="addQ" placeholder="Mængde">
+      <select id="addC">
+        <option>Frugt &amp; grønt</option><option>Brød</option><option>Mejeri</option><option>Kød &amp; fisk</option><option>Frost</option><option>Kolonial</option><option>Øvrigt</option>
+      </select>
+      <button class="primary" id="addBtn">Tilføj</button>
+    </div>
+    <div class="shopcount" id="shopCount"></div>
+    <div id="shopList"></div>
+  </div>
+</div>
+</main>
+
+<div class="modal-back" id="modalBack"><div class="modal" id="modal"></div></div>
 
 <script>
 const CATS=["Frugt & grønt","Brød","Mejeri","Kød & fisk","Frost","Kolonial"];
@@ -309,16 +461,12 @@ SLOTS.forEach(slot=>{
   const wrap=document.createElement("div");wrap.className="slot";
   wrap.innerHTML=`<div class="slot-title">${slot}</div>`;
   inSlot.forEach(d=>{
-    const row=document.createElement("label");row.className="dish"+(sel.has(d.id)?" on":"");
+    const row=document.createElement("label");row.className="dish"+(sel.has(d.id)?" on":"");row.dataset.id=d.id;
     row.innerHTML=`<input type="checkbox" ${sel.has(d.id)?"checked":""}>
       <span class="name">${d.name} ${d.dyr?'<span class="tag">dyr</span>':''}</span>
       <span class="stats">${d.pris} kr · ${d.prot} g P · ${d.fib} g fib · ${d.kcal} kcal</span>
       ${portionBadge(d)}`;
-    row.querySelector("input").addEventListener("change",e=>{
-      if(e.target.checked){sel.add(d.id);row.classList.add("on");}
-      else{sel.delete(d.id);row.classList.remove("on");}
-      save();render();
-    });
+    row.querySelector("input").addEventListener("change",e=>{ toggleDish(d.id,e.target.checked); });
     wrap.appendChild(row);
   });
   dishesEl.appendChild(wrap);
@@ -425,11 +573,7 @@ function itemRow(m){
 }
 
 document.getElementById("hidePantry").addEventListener("change",render);
-document.getElementById("clearBtn").addEventListener("click",()=>{
-  sel.clear();checkedItems.clear();save();
-  document.querySelectorAll(".dish").forEach(r=>{r.classList.remove("on");r.querySelector("input").checked=false;});
-  render();
-});
+document.getElementById("clearBtn").addEventListener("click",()=>{ sel.clear();checkedItems.clear();save();syncSelUI(); });
 document.getElementById("copyBtn").addEventListener("click",()=>{
   const map=aggregate();let txt="INDKØBSLISTE\n";
   [...CATS].forEach(cat=>{
@@ -445,6 +589,331 @@ document.getElementById("copyBtn").addEventListener("click",()=>{
 });
 
 render();
+
+/* ================= Opskrifter · Indkøbsliste · Faner ================= */
+const ORDER=[...CATS,"Øvrigt"];
+const ICON2=Object.assign({},ICON,{"Øvrigt":"🛒"});
+function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
+function escAttr(s){return String(s).replace(/&/g,"&amp;").replace(/"/g,"&quot;").replace(/</g,"&lt;");}
+function leadLabel(s){const m=String(s).match(/^([^.:]{1,26}):(\s)/);
+  if(m)return "<b>"+esc(m[1])+":</b>"+m[2]+esc(String(s).slice(m[0].length));return esc(s);}
+function flash(btn,msg){if(!btn||btn._t)return;const o=btn.textContent;btn.textContent=msg;btn._t=setTimeout(()=>{btn.textContent=o;btn._t=null;},1500);}
+
+/* opskrifter (fremgangsmåde m.m.) keyed på ret-id — nøgletal hentes fra D */
+const R={
+ laks:{t:"Ovnbagt laks med squash, små kartofler og citron-urtecreme",tid:30,
+  ing:["450 g laksefilet (uden ben)","800 g små kartofler","1 squash","200 g ærter (friske eller frosne)","1 citron","200 g skyr (naturel)","1 fed hvidløg","Frisk dild eller persille","Olie, salt, peber"],
+  steps:["Tænd ovnen på 200°. Kog kartoflerne møre, ca. 15 min.","Læg laksen i et fad, dryp med olie og lidt citron, krydr med salt og peber. Bag 12-15 min.","Skær squash i skiver, vend med olie og lidt salt, og steg på pande eller bag med i ovnen til de er møre.","Kog ærterne kort.","Rør citron-urtecremen: skyr, presset hvidløg, 1-2 spsk citronsaft, hakket dild og salt."],
+  barn:"Server laks, kartofler, squash og ærter hver for sig. Cremen ved siden af.",
+  kryds:"Squash → frittata · skyr → kyllingedeller, torsk · citron → flere retter"},
+ fiskefrik:{t:"Fiskefrikadeller med skyr-kartoffelsalat og ærter",tid:35,
+  ing:["500 g torske- eller sejfars (eller hakket torsk)","1 æg","2 spsk havregryn eller rasp","800 g kartofler","200 g ærter","250 g skyr","2 spsk mayonnaise","1 citron","Frisk dild","Løgpulver, smør, salt, peber"],
+  steps:["Kog kartoflerne møre, lad dem køle lidt, og skær dem i grove tern.","Rør fisken med æg, havregryn, citronskal, løgpulver, hakket dild, salt og peber. Form frikadeller.","Steg dem i smør ved middel varme, ca. 4 min. på hver side.","Vend de lune kartofler i en dressing af skyr, mayo, citronsaft, dild og salt.","Kog ærterne kort."],
+  barn:"Frikadeller, kartofler og ærter hver for sig — kartoffelsalaten kan serveres uden dressing til barnet.",
+  kryds:"Skyr, citron, dild, ærter → mange andre retter"},
+ torsk:{t:"Bagt torsk med fuldkornsris, broccoli og citron-dildsauce",tid:30,
+  ing:["500 g torskefilet","250 g fuldkornsris","1 stort broccolihoved (~400 g)","150 g skyr","1 citron","1 fed hvidløg","Frisk dild","Olie, smør, salt, peber"],
+  steps:["Kog risene efter anvisningen.","Tænd ovnen på 200°. Læg torsken i et fad, dryp med olie og citron, krydr med salt og peber, og bag 12-15 min.","Del broccoli i buketter og damp eller kog dem 4-5 min., så de stadig har bid.","Rør saucen: skyr, citronsaft, presset hvidløg, hakket dild og salt."],
+  barn:"Torsk, ris og broccoli hver for sig. Saucen ved siden af.",
+  kryds:"Fuldkornsris → karry, halloumi-bowl, æg-stegte ris · broccoli → flere retter"},
+ kyldeller:{t:"Kyllingedeller med ovnbagte rodfrugter, ærter og hvidløgs-skyrdip",tid:40,
+  ing:["500 g kyllingefars","1 æg","2 spsk rasp","3 gulerødder","2 pastinakker","600 g kartofler","200 g ærter","150 g skyr","2 fed hvidløg","1 citron","Frisk persille","Løgpulver, paprika, olie, salt, peber"],
+  steps:["Tænd ovnen på 220°. Skær rodfrugter og kartofler i både, vend med olie, paprika, løgpulver og salt, og bag 30-35 min.","Rør farsen med æg, rasp, 1 presset fed hvidløg, løgpulver, paprika, salt og peber. Form deller.","Steg dellerne i lidt olie ved middel varme, ca. 4-5 min. på hver side.","Kog ærterne kort.","Rør dippen: skyr, 1 presset fed hvidløg, citronsaft, hakket persille og salt."],
+  barn:"Deller, rodfrugter og ærter hver for sig. Dip ved siden af.",
+  kryds:"Rodfrugter + skyrdip → kyllingeoverlår · ærter → mange retter"},
+ oksebof:{t:"Oksebøffer med grov kartoffelmos, ærter og løgfri skysauce",tid:30,
+  ing:["500 g hakket oksekød (8-12 %)","1 æg","800 g kartofler","1 dl mælk","250-300 g ærter","1 dl madlavningsfløde","2 dl oksebouillon","Evt. en sjat rødvin (koges ind)","Mel, smør, brun kulør, løgpulver, salt, peber"],
+  steps:["Kog kartoflerne møre. Mos dem groft med smør, mælk og salt.","Form bøffer af oksekød, æg, løgpulver, salt og peber. Steg dem færdige, og tag dem op.","Skysauce: smelt smør i panden, rør lidt mel i, tilsæt bouillon (og evt. rødvin, der koges ind), så fløde. Lad simre til den jævner, smag til med kulør og salt.","Kog ærterne kort."],
+  barn:"Bøf, mos og ærter hver for sig. Sauce ved siden af.",
+  kryds:"Kartofler, ærter → mange retter · skysauce-teknikken → andre kødretter"},
+ kodboller:{t:"Kyllingefars-kødboller i tomatsauce med fuldkornspasta",tid:35,
+  ing:["500 g kyllingefars","1 æg","2 spsk rasp","2 dåser hakkede tomater","1 spsk tomatpuré","300 g fuldkornspasta","30 g parmesan","2 fed hvidløg","Evt. en sjat rødvin (koges ind)","1 tsk sukker, tørret basilikum, løgpulver, olie, salt, peber"],
+  steps:["Rør farsen med æg, rasp, 1 presset fed hvidløg, løgpulver, salt og peber. Form små kødboller.","Brun kødbollerne i lidt olie, og tag dem op.","Sauce: svits 1 presset fed hvidløg kort, tilsæt tomatpuré, hakkede tomater, (evt. rødvin), sukker, løgpulver og basilikum. Lad simre 10 min. Læg kødbollerne i og lad dem blive færdige.","Kog pastaen."],
+  barn:"Pasta, kødboller og sauce kan serveres adskilt — mange børn vil have saucen \"ved siden af\".",
+  kryds:"Tomatsauce + fuldkornspasta → deler med kylling-pasta · parmesan → flere retter"},
+ kodsovs:{t:"Pasta med kødsovs (eller vegetarversion med belugalinser)",tid:40,
+  ing:["400 g hakket oksekød (8-12 %) — eller 250 g belugalinser (vegetarversion)","2 stængler bladselleri","2-3 gulerødder","2 dåser hakkede tomater","1 spsk tomatpuré","300 g fuldkornspasta","30-40 g parmesan","2 fed hvidløg","Evt. en sjat rødvin (koges ind)","(veg: 2-3 dl grøntsagsbouillon)","Løgpulver, oregano/basilikum, 1 tsk sukker, olie, salt, peber"],
+  steps:["Finthak bladselleri, og riv guleroden fint (så den nærmest forsvinder for barnet).","Brun oksekødet i olie — eller svits grøntsagerne og skyl belugalinserne.","Tilsæt presset hvidløg, løgpulver, tomatpuré, bladselleri og gulerod, og svits et par minutter.","Tilsæt hakkede tomater, (evt. rødvin), sukker og krydderurter. Lad simre 20-30 min. (Veg: tilsæt linser + bouillon og kog ~25 min, til de er møre.)","Kog pastaen. Top med parmesan."],
+  barn:"Pasta + kødsovs; de fintrevne grøntsager giver fylde uden at \"ses\".",
+  noter:["IBS: bladselleri er moderat FODMAP — skru ned eller udelad efter behov (din vurdering). Belugalinser trappes forsigtigt ind.","Protein-løft (veg): ekstra parmesan eller en klat ricotta."],
+  kryds:"Gulerod, fuldkornspasta, parmesan, hakkede tomater → mange retter"},
+ karry:{t:"Boller i karry (eller kylling i karry)",tid:40,
+  ing:["500 g kalv-/flæskefars (til boller) — eller 400 g kylling i tern","1 æg + 2 spsk rasp (til boller)","250 g ris (gerne fuldkorn)","2-3 gulerødder","200 g ærter","4 dl mælk + 4 dl bouillon (eller 2 dl fløde + 4 dl bouillon)","1-2 spsk mild karry","2 fed hvidløg","Smør, mel, løgpulver, salt"],
+  steps:["Boller: rør fars med æg, rasp, løgpulver og salt. Form små boller og kog dem i bouillon 6-8 min. (Eller steg kyllingetern gyldne.)","Karrysauce: smelt smør, rør karry og mel i, og spæd med mælk/bouillon til en glat sauce. Smag til med løgpulver og salt.","Vend boller (eller kylling), gulerod i tynde skiver og ærter i saucen. Lad simre et par minutter.","Kog risen."],
+  barn:"Ris + boller + lidt mild sauce. Karryen er mild — hold den evt. helt fra barnets portion.",
+  kryds:"Ris, gulerod, ærter → mange retter · karrysauce-teknik → kokoskarryen"},
+ wok:{t:"Oksewok med fuldkornsnudler, broccoli og peberfrugt",tid:25,
+  ing:["400 g strimlet oksekød (eller hakket okse)","200 g fuldkornsnudler (eller fuldkornsris)","1 broccolihoved","1 peberfrugt","2 gulerødder","200 g ærter","2 fed hvidløg","1 spsk revet frisk ingefær","3-4 spsk sojasauce","Løgpulver, olie, evt. sesam"],
+  steps:["Kog nudlerne.","Steg oksekødet hurtigt ved høj varme, og tag det op.","Wok broccoli, peberfrugt og gulerod et par minutter med presset hvidløg og ingefær.","Vend kød, nudler, ærter, soja og løgpulver i, og varm det hele igennem."],
+  barn:"Hold det mildt (lidt mindre soja/ingefær), og server delene mere adskilt.",
+  kryds:"Broccoli, peberfrugt, gulerod, ærter, fuldkorn → mange retter"},
+ krempasta:{t:"Cremet kylling-fuldkornspasta med soltørrede tomater, spinat og parmesan",tid:25,
+  ing:["350-400 g kyllingebryst eller -inderfilet","300 g fuldkornspasta","80 g soltørrede tomater","2 håndfulde frisk spinat","2 dl madlavningsfløde","2 spsk skyr","30-40 g fintrevet parmesan","2 fed hvidløg","Løgpulver, paprika, olie, salt, peber"],
+  steps:["Kog pastaen. Gem lidt pastavand.","Skær kyllingen i stykker og steg den gylden i olie.","Tilsæt presset hvidløg, løgpulver og paprika, steg 30 sek.","Kom soltørrede tomater i strimler på, tilsæt fløde og skyr, lad simre 2-3 min.","Rør parmesan i, vend spinaten i, til den falder sammen.","Vend pastaen i med lidt pastavand. Smag til."],
+  barn:"Server pasta og kylling med lidt sauce, og hold spinat/tomat ved siden af, hvis det ønskes.",
+  kryds:"Spinat + parmesan → frittata, grøn pasta · fuldkornspasta → flere retter"},
+ kokoskarry:{t:"Mild kokos-kyllingekarry med fuldkornsris og ærter",tid:30,
+  ing:["400 g kylling i tern","250 g fuldkornsris","1 dåse kokosmælk","2 gulerødder","1 peberfrugt","200 g ærter","2 fed hvidløg","1 lime eller 1/2 citron","1-2 spsk mild karry, løgpulver, olie, salt"],
+  steps:["Kog risene.","Steg kyllingen gylden i olie. Tilsæt presset hvidløg, karry og løgpulver, og steg kort.","Tilsæt kokosmælk samt gulerod og peberfrugt i tern. Lad simre 8-10 min.","Vend ærterne i de sidste par minutter. Smag til med lime/citron og salt."],
+  barn:"Server ris, kylling og lidt sauce. Karryen er mild, men hold den evt. helt fra barnets portion og giv ekstra ærter/gulerod.",
+  kryds:"Fuldkornsris, ærter, peberfrugt, gulerod → mange retter"},
+ overlaar:{t:"Ovnstegt kyllingeoverlår med ovnbagte rodfrugter og hvidløgs-skyrdip",tid:45,
+  ing:["6 kyllingeoverlår (med skind)","3 gulerødder","2 pastinakker","600 g kartofler","150 g skyr","2 fed hvidløg","1 citron","Frisk persille","Paprika, løgpulver, olie, salt, peber"],
+  steps:["Tænd ovnen på 200°. Gnid overlårene med olie, paprika, løgpulver, presset hvidløg, salt og peber.","Skær rodfrugter og kartofler i både, vend med olie og krydderier, og fordel i et fad.","Læg kyllingen ovenpå og steg det hele 40-45 min., til kyllingen er gennemstegt og sprød.","Rør dippen: skyr, presset hvidløg, citronsaft, persille og salt."],
+  barn:"Pil kødet af benet og server med rodfrugter hver for sig. Dip ved siden af.",
+  kryds:"Rodfrugter + skyrdip → deler med kyllingedeller"},
+ frittata:{t:"Grøn frittata med squash, peberfrugt og feta",tid:25,
+  ing:["8 æg","1 squash","1 peberfrugt","2 håndfulde spinat","100 g feta","1 dl mælk","200 g hytteost","4 skiver fuldkornsbrød","1 fed hvidløg","Løgpulver, olie, salt, peber"],
+  steps:["Tænd ovnen på 180°. Skær squash og peberfrugt i mindre stykker og svits dem et par minutter i en ovnfast pande med olie og presset hvidløg. Vend spinaten i.","Pisk æg med mælk, løgpulver, salt og peber, og hæld over grøntsagerne.","Smuldr feta over og bag frittataen i ovnen 18-20 min., til den er sat.","Server med fuldkornsbrød og hytteost ved siden af (hytteosten giver et ekstra proteinløft)."],
+  barn:"Skær frittataen i stænger (\"æggepandekage\"), og giv grøntsager og brød ved siden af.",
+  kryds:"Squash, spinat, peberfrugt, feta → laks, pasta, halloumi-bowl"},
+ aertepasta:{t:"Cremet fuldkornspasta med ærter, spinat og feta",tid:25,
+  ing:["300 g fuldkornspasta","250 g ærter","2 håndfulde spinat","100 g feta","2 dl madlavningsfløde eller 150 g flødeost","30 g parmesan","1-2 æg (valgfrit, for ekstra protein)","2 fed hvidløg","1 citron","Løgpulver, olie, salt, peber"],
+  steps:["Kog pastaen. Tilsæt ærterne de sidste 2 min.","Svits presset hvidløg kort i olie, tilsæt fløde/flødeost og lad det varme igennem.","Rør parmesan i, vend spinaten i, til den falder sammen. Smag til med citron, løgpulver, salt og peber.","Vend pasta og ærter i. Smuldr feta over.","Vil du sikre proteingulvet, kan du toppe med et pocheret/blødkogt æg pr. voksen."],
+  barn:"Pasta og ærter med lidt sauce, feta ved siden af.",
+  kryds:"Fuldkornspasta, ærter, spinat, feta, parmesan → mange retter"},
+ halloumi:{t:"Halloumi-bowl med fuldkornsris, ovnbagte grøntsager og citron-skyrdressing",tid:30,
+  ing:["2 pakker halloumi (~450 g)","250 g fuldkornsris","1 squash","1 peberfrugt","2 gulerødder","150 g skyr","1 citron","1 fed hvidløg","Frisk persille","Paprika, løgpulver, olie, salt"],
+  steps:["Tænd ovnen på 220°. Skær squash, peberfrugt og gulerod i stykker, vend med olie, paprika og løgpulver, og bag 20-25 min.","Kog risene.","Skær halloumi i skiver og steg dem gyldne på en tør/let olieret pande.","Rør dressingen: skyr, citronsaft, presset hvidløg, persille og salt.","Anret ris, grøntsager og halloumi i skåle med dressing."],
+  barn:"Byg barnets skål med tingene adskilt — halloumi er ofte et hit som \"stegt ost\".",
+  kryds:"Fuldkornsris, squash, peberfrugt, gulerod, skyr → mange retter"},
+ risotto:{t:"Svampe-risotto med hvidvin, ærter og bacon",tid:35,
+  ing:["250 g risottoris (arborio)","200 g svampe (champignon)","150 g bacon i tern","200 g ærter","1 dl hvidvin","1-1,2 l grøntsags- eller hønsebouillon","40-50 g parmesan","2 fed hvidløg","Smør, løgpulver, persille, salt, peber"],
+  steps:["Steg bacon sprødt, tag op. Steg svampene i samme pande, tag op.","Svits risen i smør med presset hvidløg og løgpulver. Hæld hvidvinen ved og lad den koge helt ind.","Tilsæt bouillon lidt ad gangen under omrøring, ~18-20 min, til risen er cremet og al dente.","Vend svampe, ærter, det meste bacon og parmesan i. Top med resten af bacon og persille."],
+  barn:"\"Cremet ris med bacon og ærter\" — hold svampene ved siden af, hvis det ønskes.",
+  noter:["Protein-løft: retten lander ~22 g/portion. For at nå over proteingulvet: øg bacon til 200 g, tilsæt stegt kylling, eller læg et blødkogt æg ovenpå.","IBS: svampe er en kendt trigger (mannitol) — skru ned eller udelad efter behov (din vurdering). Hvidvinen koges helt ind."],
+  kryds:"Ærter, parmesan, bacon → flere retter"},
+ polseret:{t:"Svensk pølseret",tid:25,
+  ing:["400-500 g gode pølser (vælg løgfri — tjek varedeklarationen)","250 g ris eller 300 g pasta (gerne fuldkorn)","1 dåse hakkede tomater","2 spsk tomatpuré","1 peberfrugt","1 dl madlavningsfløde","2 fed hvidløg","Paprika, løgpulver, 1 tsk sukker, salt"],
+  steps:["Skær pølserne i skiver og brun dem.","Tilsæt presset hvidløg, paprika, løgpulver, tomatpuré og peberfrugt i strimler, og svits kort.","Tilsæt hakkede tomater, sukker og fløde, og lad simre 10 min.","Kog ris eller pasta."],
+  barn:"Pølser i mild tomatsauce er typisk et hit — server med ris.",
+  noter:["Løg: mange pølser indeholder løg — vælg en variant uden, og brug løgpulver til smagen.","Protein-løft: ~24 g/portion. Øg pølsemængden eller riv ost over for at nå proteingulvet."],
+  kryds:"Hakkede tomater, peberfrugt, fløde → flere retter"},
+ stegtflaesk:{t:"Stegt flæsk med persillesovs og kartofler",tid:35,
+  ing:["500-600 g stegeflæsk i skiver","800 g kartofler","5 dl mælk","2 spsk smør + 2 spsk mel","1 stort bundt persille","200 g ærter eller en grøn salat (til fiber ved siden af)","Salt, peber"],
+  steps:["Kog kartoflerne.","Steg flæsket sprødt på pande eller i ovn (200°, ~20-25 min, vendt undervejs).","Persillesovs: smelt smør, rør mel i, og spæd med mælk til en glat sovs. Kog 5 min, vend rigeligt hakket persille i, og smag til.","Server med ærter eller salat ved siden af."],
+  barn:"Sprødt flæsk, kartofler og sovs hver for sig — ofte et stort hit.",
+  noter:["Fiber: retten er i sig selv fiberfattig — server bevidst med ærter, råkost eller salat for at løfte den."],
+  kryds:"Kartofler, ærter, persille → mange retter"},
+ wraps:{t:"Wraps eller tortillapizza med ugens rester",tid:20,
+  ing:["6 fuldkornstortillas","Rester af kylling eller fars (~250 g)","125 g revet ost","1 dåse majs","1 peberfrugt","2 gulerødder","1/2 agurk","Lidt cherrytomater","Skyr (til klat/dip)"],
+  steps:["Som wraps: varm tortillas kort, fyld med kød, ost, majs og grøntsager, og en klat skyr. Rul sammen.","Som tortillapizza: læg tortillas på bagepapir, fordel et tyndt lag tomat/skyr, top med kød, majs, peberfrugt og ost, og bag ved 200° i 8-10 min., til osten er smeltet."],
+  barn:"Lad barnet selv samle sin wrap af de adskilte dele — sjovt og deleligt.",
+  kryds:"Det er selve rest-retten — bygger på alt det, ugen efterlader"},
+ aegris:{t:"Æg-stegte fuldkornsris med ugens rester",tid:20,
+  ing:["300 g kogt fuldkornsris (rester — ellers kog 250 g)","4 æg","Rester af kød og grønt","2 gulerødder","200 g ærter","2 fed hvidløg","Lidt sojasauce","Løgpulver, olie, salt"],
+  steps:["Steg gulerod i tern og presset hvidløg i olie et par minutter.","Tilsæt risene og evt. kødrester, og steg dem varme og let sprøde.","Skub risene til side, slå æggene ud i panden og rør dem til de er sat, og vend så det hele sammen.","Vend ærter (og evt. grøntrester) i, smag til med løgpulver, lidt soja og salt."],
+  barn:"Hold portionen mild, og servér evt. ris, æg og grønt mere adskilt.",
+  kryds:"Bruger fuldkornsris fra torsk/karry/halloumi-dagene"},
+ nacho:{t:"Nacho-/tortillafad med rester, ost og skyr",tid:20,
+  ing:["Fuldkornsnachos eller tortillas skåret i både","Rester af fars eller kylling (~250 g)","150 g revet ost","1 dåse majs","1 dåse hakkede tomater","1 peberfrugt","Skyr (til topping)","2 fed hvidløg","Løgpulver, salt","Evt. jalapeño ved siden af (til de voksne)"],
+  steps:["Lav en hurtig salsa: svits presset hvidløg, tilsæt hakkede tomater og løgpulver, lad simre 5 min., smag til.","Fordel nachos/tortillabåde i et ovnfast fad. Top med kødrester, salsa, majs, peberfrugt og ost.","Bag ved 200° i 8-10 min., til osten er smeltet.","Server med en klat skyr og evt. jalapeño ved siden af."],
+  barn:"Giv barnet \"nachos med ost\" og hold salsa/jalapeño ved siden af.",
+  kryds:"Majs, ost, peberfrugt, skyr → wraps og mange retter"},
+ frikadeller:{t:"Frikadeller med kartofler og grønt",tid:35,
+  ing:["500 g hakket kalv/flæsk","1 æg","3 spsk rasp","1 dl mælk","800 g kartofler","200 g ærter eller råkost (til fiber)","Løgpulver, smør, salt, peber"],
+  steps:["Rør farsen med æg, rasp, mælk, løgpulver, salt og peber. Lad den hvile 10 min.","Form frikadeller og steg dem i smør ved middel varme, ca. 5 min. på hver side.","Kog kartoflerne.","Server med ærter eller råkost."],
+  barn:"Frikadeller, kartofler og grønt hver for sig — næsten altid et hit.",
+  noter:["Fiber: server bevidst med ærter eller råkost, da retten ellers er fiberfattig."],
+  kryds:"Kartofler, ærter, fars-teknik → mange retter"},
+ chili:{t:"Chili con carne med nachos og ris",tid:40,
+  ing:["500 g hakket oksekød","1 dåse kidneybønner","1 dåse hakkede tomater","1 dåse majs","1 peberfrugt","250 g ris","1 pose nachos","100 g revet ost","Skyr (til topping)","2 fed hvidløg","Løgpulver, spidskommen, mild paprika, salt"],
+  steps:["Brun oksekødet. Tilsæt presset hvidløg, løgpulver, spidskommen og paprika.","Tilsæt hakkede tomater, kidneybønner, majs og peberfrugt i tern. Lad simre 20 min.","Kog risen.","Server med nachos, revet ost og en klat skyr."],
+  barn:"Hold det mildt — server ris, kød og ost, og lad chili/bønner stå ved siden af.",
+  noter:["Løg: ingen løg — smag til med løgpulver.","IBS: kidneybønner er FODMAP-tunge — skyl dem grundigt og dosér, eller skru ned (din vurdering)."],
+  kryds:"Hakkede tomater, majs, ris, ost → mange retter"},
+ lasagne:{t:"Lasagne",tid:60,
+  ing:["400 g hakket oksekød","2 dåser hakkede tomater","1 spsk tomatpuré","2 gulerødder","Lasagneplader (gerne fuldkorn)","100 g revet ost","30 g parmesan","5 dl mælk","2 fed hvidløg","Mel, smør, løgpulver, oregano, olie, salt, peber"],
+  steps:["Kødsovs: brun kødet, tilsæt presset hvidløg, løgpulver, tomatpuré, hakkede tomater og fintrevet gulerod. Lad simre 15-20 min.","Bechamel: smelt smør, rør mel i, spæd med mælk til en glat sovs, smag til.","Lagdel plader, kødsovs og bechamel i et fad. Slut med bechamel og revet ost + parmesan.","Bag ved 200° i 30-35 min."],
+  barn:"Lasagne er typisk et hit; skær et hjørne med mindre \"blandet\" fyld.",
+  noter:["Løg: ingen løg — smag til med løgpulver."],
+  kryds:"Kødsovsen deler princip med Pasta med kødsovs · hakkede tomater, gulerod"},
+ tikka:{t:"Kylling tikka masala",tid:35,
+  ing:["500 g kyllingebryst","1 dåse hakkede tomater","1 dl madlavningsfløde (eller kokosmælk)","150 g skyr (til marinade)","250 g ris","1 spsk revet frisk ingefær","2 fed hvidløg","2 spsk tikka masala-krydderi (eller garam masala + paprika)","Løgpulver, olie, salt","Evt. frisk koriander"],
+  steps:["Marinér kyllingen i skyr og lidt krydderi (gerne 20 min, valgfrit). Steg den gylden.","Svits hvidløg, ingefær og krydderi i olie. Tilsæt hakkede tomater og fløde, og lad simre 10-15 min.","Vend kyllingen i saucen. Smag til med løgpulver og salt.","Kog risen."],
+  barn:"Mild version — server kylling og ris, og hold saucen ved siden af.",
+  noter:["Løg: ingen løg — smag til med løgpulver."],
+  kryds:"Ris, hakkede tomater, fløde, ingefær → mange retter"},
+ paprika:{t:"Paprikagryde",tid:40,
+  ing:["500 g kylling eller svinekød i tern","2-3 peberfrugter","2 dåser hakkede tomater","1 dl creme fraiche","250 g ris eller pasta","2 fed hvidløg","2 spsk paprika (gerne røget + mild), løgpulver, olie, salt"],
+  steps:["Brun kødet i olie.","Tilsæt presset hvidløg, paprika og løgpulver, og svits kort.","Tilsæt peberfrugt i strimler og hakkede tomater. Lad simre 20-25 min.","Rør creme fraiche i, og smag til. Kog ris eller pasta."],
+  barn:"Server kød og ris, og hold saucen ved siden af.",
+  noter:["Løg: ingen løg — smag til med løgpulver."],
+  kryds:"Peberfrugt, hakkede tomater, ris → mange retter"},
+ pizza:{t:"Hjemmelavet pizza",tid:45,
+  ing:["300 g mel (gerne halvt fuldkorn) + gær — eller 2 færdige bunde","1 dåse passata eller hakkede tomater + 1 spsk tomatpuré","200 g mozzarella eller revet ost","100 g skinke (eller stegt kylling)","1 peberfrugt","1 dåse majs","1 fed hvidløg","Løgpulver, oregano, olie, salt"],
+  steps:["Lav dej af mel, gær, vand, olie og salt. Lad hæve 30-60 min. (Spring over med færdige bunde.)","Rør en hurtig sauce af passata, presset hvidløg, løgpulver og oregano.","Rul dejen ud, smør sauce på, og fordel ost og topping.","Bag ved 250° i 8-12 min., til bunden er sprød."],
+  barn:"Lav et \"barneafsnit\" med helt enkle toppings.",
+  noter:["Løg: ingen løg — smag til med løgpulver.","Protein-løft: vælg en proteinrig topping (kylling, skinke, ekstra ost), så den når proteingulvet."],
+  kryds:"Ost, hakkede tomater, peberfrugt, majs → wraps, nachofad m.fl."},
+ suppe:{t:"Suppe på bagte grøntsager med ostebrød",tid:45,
+  ing:["500 g tomater","2 peberfrugter","2 gulerødder","1 squash","4 fed hvidløg","4 dl grøntsagsbouillon","1 dl madlavningsfløde","Fuldkornsbrød + 100 g revet ost (til ostebrød)","Løgpulver, olie, salt, peber"],
+  steps:["Tænd ovnen på 200°. Skær grøntsagerne i grove stykker, vend med olie og bag dem med hele hvidløgsfed i 25 min.","Blend de bagte grøntsager med bouillon til en glat suppe.","Rør fløde i, smag til med løgpulver, salt og peber.","Lav ostebrød: ost mellem/på brød, bagt eller stegt gyldent."],
+  barn:"Mild suppe med ostebrød til at dyppe.",
+  noter:["Løg: ingen løg — smag til med løgpulver.","Protein-løft: serveres med ostebrød, ristede kikærter eller et blødkogt æg — ellers ligger den under proteingulvet."],
+  kryds:"Bagte grøntsager, fløde, ost → flere retter"},
+ pita:{t:"Pitabrød med fyld",tid:30,
+  ing:["6 pitabrød (gerne fuldkorn)","450 g kyllingebryst eller oksefars","1 agurk","2 tomater","1 hjertesalat","2 gulerødder","150 g skyr (til dressing)","100 g feta eller revet ost","2 fed hvidløg","1 citron","Paprika, løgpulver, olie, salt"],
+  steps:["Krydr kødet med paprika, løgpulver, presset hvidløg og salt, og steg det.","Snit salat, agurk, tomat og gulerod.","Rør en dressing af skyr, presset hvidløg, citron og salt.","Varm pitabrødene. Alle samler selv."],
+  barn:"Byg-selv er sjovt og deleligt — barnet vælger sine egne dele.",
+  noter:["Løg: ingen løg — smag til med løgpulver."],
+  kryds:"Skyrdressing, salatgrønt, kød → wraps, bowls m.fl."},
+ carbonara:{t:"Spaghetti carbonara",tid:25,
+  ing:["300 g fuldkornsspaghetti","150 g bacon eller pancetta","3 æg + 2 ekstra blommer","50 g parmesan","200 g ærter eller en grøn salat (til fiber ved siden af)","1 fed hvidløg (valgfri)","Groft peber, salt"],
+  steps:["Kog pastaen. Gem lidt pastavand.","Steg baconen sprød (evt. med presset hvidløg).","Pisk æg, blommer og revet parmesan sammen.","Vend den varme pasta med bacon af varmen, og rør æggeblandingen i til en cremet sauce (spæd med pastavand). Rigeligt peber."],
+  barn:"\"Pasta med bacon og ost\" — typisk et hit.",
+  noter:["Løg: ægte carbonara har slet ingen løg.","Fiber: server med ærter eller salat ved siden af."],
+  kryds:"Fuldkornspasta, parmesan, bacon, ærter → flere retter"},
+ tapas:{t:"Tapas",tid:40,
+  ing:["100 g serranoskinke","100 g chorizo (vælg løgfri)","1 bæger oliven","150 g manchego eller anden ost","1 godt brød","1 peberfrugt","1 bakke cherrytomater","400 g kartofler + 4 æg (til tortilla española)","1 fed hvidløg","Olie, salt"],
+  steps:["Lav en simpel tortilla española uden løg: steg tynde kartoffelskiver møre, hæld piskede æg over, og lad den sætte sig på panden/i ovnen.","Anret skinke, chorizo, ost, oliven, peberfrugt og tomater på fade.","Varm brødet. Servér det hele midt på bordet."],
+  barn:"Barnet vælger selv fra fadene — naturligt delt op.",
+  noter:["Løg: vælg løgfri chorizo og hold tortillaen løgfri.","Protein-løft: tilføj kyllingespyd, frikadeller eller ekstra ost/skinke for at nå proteingulvet."],
+  kryds:"Ost, brød, peberfrugt, æg, kartofler → flere retter"},
+ padthai:{t:"Pad thai",tid:30,
+  ing:["250 g risnudler","400 g kyllingebryst (eller rejer)","3 æg","2-3 spsk tamarindpasta","Fiskesauce","100 g bønnespirer","2 gulerødder","1 håndfuld peanuts","1 lime","2 fed hvidløg","Lidt sukker, olie","Evt. frisk koriander"],
+  steps:["Udblød risnudlerne efter anvisningen.","Steg kyllingen med presset hvidløg. Skub til side og rør æggene i panden.","Tilsæt nudler og en sauce af tamarind, fiskesauce og lidt sukker.","Vend bønnespirer og fintsnittet gulerod i. Top med peanuts, lime og evt. koriander."],
+  barn:"Hold det mildt, server delene mere adskilt, og hold peanuts ved siden af.",
+  noter:["Løg: ingen løg (hvidløg er ok).","Peanuts kan udelades."],
+  kryds:"Æg, gulerod, kylling → flere retter"}
+};
+
+/* ---- opskrift-modal ---- */
+const modalBack=document.getElementById("modalBack"),modalEl=document.getElementById("modal");
+function openRecipe(id){
+  const d=D.find(x=>x.id===id),r=R[id]; if(!d||!r)return;
+  const stats=[d.pris+" kr",d.prot+" g protein",d.fib+" g fiber",d.kcal+" kcal"]; if(r.tid)stats.push("~"+r.tid+" min");
+  let h='<div class="modal-hd"><div class="slot">'+esc(d.slot)+(d.dyr?" · dyr protein":"")+'</div><h3>'+esc(r.t)+'</h3><button class="modal-x" id="mx" aria-label="Luk">✕</button></div>';
+  h+='<div class="modal-bd">';
+  h+='<label class="modal-sel"><input type="checkbox" id="mSel"'+(sel.has(id)?" checked":"")+'> Vælg til ugens plan</label>';
+  h+='<div class="modal-stats">'+stats.map(s=>'<span class="chip">'+esc(s)+'</span>').join("")+'</div>';
+  h+='<div class="msec"><h5>Indkøb til retten</h5><ul class="ming">'+r.ing.map(x=>'<li>'+esc(x)+'</li>').join("")+'</ul></div>';
+  h+='<div class="msec"><h5>Fremgangsmåde</h5><ol class="msteps">'+r.steps.map(x=>'<li>'+leadLabel(x)+'</li>').join("")+'</ol></div>';
+  if(r.barn)h+='<div class="msec"><h5>Til barnet</h5><div class="mbarn">'+leadLabel(r.barn)+'</div></div>';
+  if(r.noter&&r.noter.length)h+='<div class="msec"><h5>Noter</h5>'+r.noter.map(x=>'<div class="mnote">'+leadLabel(x)+'</div>').join("")+'</div>';
+  if(r.kryds)h+='<div class="msec"><h5>Krydsbrug</h5><div class="mkryds">'+esc(r.kryds)+'</div></div>';
+  h+='</div>';
+  modalEl.innerHTML=h;
+  modalBack.classList.add("show"); document.body.style.overflow="hidden";
+  document.getElementById("mx").onclick=closeRecipe;
+  document.getElementById("mSel").onchange=e=>toggleDish(id,e.target.checked);
+}
+function closeRecipe(){modalBack.classList.remove("show");document.body.style.overflow="";}
+modalBack.addEventListener("click",e=>{if(e.target===modalBack)closeRecipe();});
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&modalBack.classList.contains("show"))closeRecipe();});
+
+/* ---- opskriftsgitter + filtre ---- */
+const SLOTS_F=["Alle","Fisk","Fars","Kylling","Grøn","Andet","Rest"];
+let rcpFilter="Alle",rcpQuery="";
+const rcpPills=document.getElementById("rcpPills"),rcpGrid=document.getElementById("rcpGrid"),rcpSearch=document.getElementById("rcpSearch");
+SLOTS_F.forEach(s=>{const b=document.createElement("button");b.className="pill"+(s==="Alle"?" on":"");b.textContent=s;b.dataset.slot=s;
+  b.addEventListener("click",()=>{rcpFilter=s;rcpPills.querySelectorAll(".pill").forEach(p=>p.classList.toggle("on",p.dataset.slot===s));renderRecipes();});
+  rcpPills.appendChild(b);});
+rcpSearch.addEventListener("input",e=>{rcpQuery=e.target.value;renderRecipes();});
+function renderRecipes(){
+  const q=rcpQuery.trim().toLowerCase();
+  let items=D.filter(d=>rcpFilter==="Alle"||d.slot===rcpFilter);
+  if(q)items=items.filter(d=>{const r=R[d.id]||{};return (d.name+" "+(r.t||"")+" "+((r.ing||[]).join(" "))).toLowerCase().includes(q);});
+  if(!items.length){rcpGrid.innerHTML='<div class="rcp-none">Ingen retter matcher søgningen.</div>';return;}
+  rcpGrid.innerHTML=items.map(d=>{const r=R[d.id]||{};
+    const mini=[d.pris+" kr",d.prot+" g P",d.fib+" g fib"]; if(r.tid)mini.push("~"+r.tid+" min");
+    return '<div class="rcp-card'+(sel.has(d.id)?" sel":"")+'" data-id="'+d.id+'">'+
+      '<input type="checkbox" class="rcp-check" title="Vælg til ugen"'+(sel.has(d.id)?" checked":"")+'>'+
+      '<div class="rcp-slot">'+esc(d.slot)+(d.dyr?' · <span class="rcp-dyr">dyr</span>':"")+'</div>'+
+      '<div class="rcp-name">'+esc(d.name)+'</div>'+
+      '<div class="rcp-mini">'+mini.map(m=>'<span>'+esc(m)+'</span>').join("")+'</div></div>';
+  }).join("");
+  rcpGrid.querySelectorAll(".rcp-card").forEach(c=>{const id=c.dataset.id;
+    c.addEventListener("click",e=>{if(e.target.classList.contains("rcp-check"))return;openRecipe(id);});
+    const cb=c.querySelector(".rcp-check");
+    cb.addEventListener("click",e=>e.stopPropagation());
+    cb.addEventListener("change",e=>toggleDish(id,e.target.checked));
+  });
+}
+
+/* ---- valg-synkronisering på tværs af faner ---- */
+function toggleDish(id,on){if(on)sel.add(id);else sel.delete(id);save();syncSelUI();}
+function syncSelUI(){
+  document.querySelectorAll("#dishes .dish").forEach(row=>{const on=sel.has(row.dataset.id);row.classList.toggle("on",on);const cb=row.querySelector("input");if(cb)cb.checked=on;});
+  document.querySelectorAll(".rcp-card").forEach(c=>{const on=sel.has(c.dataset.id);c.classList.toggle("sel",on);const cb=c.querySelector(".rcp-check");if(cb)cb.checked=on;});
+  render();
+}
+
+/* ---- indkøbsliste (redigerbar) ---- */
+let liste=[]; try{liste=JSON.parse(localStorage.getItem("madplan_liste")||"[]");}catch(e){liste=[];}
+if(!Array.isArray(liste))liste=[];
+const shopList=document.getElementById("shopList"),shopCount=document.getElementById("shopCount");
+const overBtn=document.getElementById("overBtn"),shopPantry=document.getElementById("shopPantry");
+const addN=document.getElementById("addN"),addQ=document.getElementById("addQ"),addC=document.getElementById("addC"),addBtn=document.getElementById("addBtn");
+const copyShopBtn=document.getElementById("copyShopBtn"),uncheckBtn=document.getElementById("uncheckBtn"),emptyBtn=document.getElementById("emptyBtn");
+function saveListe(){try{localStorage.setItem("madplan_liste",JSON.stringify(liste));}catch(e){}}
+function collect(includePantry){const map={};D.filter(d=>sel.has(d.id)).forEach(d=>d.ing.forEach(i=>{if(!includePantry&&i.p)return;const k=i.n.toLowerCase();if(!map[k])map[k]={n:i.n,c:i.c,entries:[]};map[k].entries.push({q:i.q,u:i.u});}));return map;}
+function overfoer(){
+  if(!sel.size){flash(overBtn,"Vælg retter først");return;}
+  const items=Object.values(collect(shopPantry.checked));
+  liste=liste.filter(r=>r.src==="ekstra"||r.done);
+  const have=new Set(liste.map(r=>r.n.toLowerCase()));
+  items.forEach(m=>{const k=m.n.toLowerCase(),q=fmtQty(m.entries);
+    if(have.has(k)){const row=liste.find(r=>r.n.toLowerCase()===k);if(row&&row.src==="uge")row.q=q;}
+    else{liste.push({n:m.n,q:q,c:m.c,done:false,src:"uge"});have.add(k);}});
+  saveListe();renderShop();flash(overBtn,"Overført ✓");
+}
+function addItem(){const n=addN.value.trim();if(!n){addN.focus();return;}
+  const q=addQ.value.trim(),c=addC.value,k=n.toLowerCase();
+  const ex=liste.find(r=>r.n.toLowerCase()===k);
+  if(ex){if(q)ex.q=q;ex.done=false;}else liste.push({n:n,q:q,c:c,done:false,src:"ekstra"});
+  addN.value="";addQ.value="";saveListe();renderShop();addN.focus();
+}
+function srowHTML(r){const i=liste.indexOf(r);
+  return '<div class="srow'+(r.done?" done":"")+'" data-i="'+i+'"><input type="checkbox" class="chk"'+(r.done?" checked":"")+'>'+
+    '<span class="sn">'+esc(r.n)+'</span>'+(r.src==="ekstra"?'<span class="ex">ekstra</span>':"")+
+    '<input class="sq" value="'+escAttr(r.q||"")+'" placeholder="—">'+
+    '<button class="del" title="Fjern vare">✕</button></div>';
+}
+function renderShop(){
+  if(!liste.length){shopList.innerHTML='<div class="shop-empty">Listen er tom. Vælg retter under <b>Ugeplan</b> og tryk “Overfør ugens varer”, eller tilføj varer manuelt herover.</div>';updateShopCount();return;}
+  let html="";const known=new Set(ORDER);
+  ORDER.forEach(cat=>{const rows=liste.filter(r=>r.c===cat);if(!rows.length)return;
+    html+='<div class="shop-cat"><h4>'+(ICON2[cat]||"🛒")+" "+esc(cat)+'</h4>'+rows.map(srowHTML).join("")+'</div>';});
+  const rest=liste.filter(r=>!known.has(r.c));
+  if(rest.length)html+='<div class="shop-cat"><h4>🛒 Øvrigt</h4>'+rest.map(srowHTML).join("")+'</div>';
+  shopList.innerHTML=html;
+  shopList.querySelectorAll(".srow").forEach(el=>{const i=+el.dataset.i;
+    el.querySelector(".chk").addEventListener("change",e=>{liste[i].done=e.target.checked;el.classList.toggle("done",e.target.checked);saveListe();updateShopCount();});
+    el.querySelector(".del").addEventListener("click",()=>{liste.splice(i,1);saveListe();renderShop();});
+    el.querySelector(".sq").addEventListener("change",e=>{liste[i].q=e.target.value;saveListe();});
+  });
+  updateShopCount();
+}
+function updateShopCount(){const t=liste.length,d=liste.filter(r=>r.done).length;shopCount.textContent=t?(d+" / "+t+" krydset af"):"";}
+function copyShop(){
+  if(!liste.length){flash(copyShopBtn,"Tom liste");return;}
+  let txt="INDKØBSLISTE\n";const known=new Set(ORDER);
+  ORDER.forEach(cat=>{const rows=liste.filter(r=>r.c===cat);if(!rows.length)return;txt+="\n"+cat.toUpperCase()+"\n";rows.forEach(r=>{txt+="- "+r.n+(r.q?(" "+r.q):"")+(r.done?" ✓":"")+"\n";});});
+  const rest=liste.filter(r=>!known.has(r.c));if(rest.length){txt+="\nØVRIGT\n";rest.forEach(r=>{txt+="- "+r.n+(r.q?(" "+r.q):"")+"\n";});}
+  navigator.clipboard.writeText(txt).then(()=>flash(copyShopBtn,"Kopieret ✓")).catch(()=>alert("Kunne ikke kopiere automatisk."));
+}
+overBtn.addEventListener("click",overfoer);
+addBtn.addEventListener("click",addItem);
+addN.addEventListener("keydown",e=>{if(e.key==="Enter")addItem();});
+addQ.addEventListener("keydown",e=>{if(e.key==="Enter")addItem();});
+copyShopBtn.addEventListener("click",copyShop);
+uncheckBtn.addEventListener("click",()=>{liste.forEach(r=>r.done=false);saveListe();renderShop();});
+emptyBtn.addEventListener("click",()=>{if(!liste.length)return;if(confirm("Tøm hele indkøbslisten?")){liste=[];saveListe();renderShop();}});
+
+/* ---- faner ---- */
+function switchTab(name){
+  document.querySelectorAll(".tabbtn").forEach(b=>b.classList.toggle("active",b.dataset.tab===name));
+  document.querySelectorAll(".tab-panel").forEach(p=>p.classList.toggle("active",p.id==="tab-"+name));
+  try{localStorage.setItem("madplan_tab",name);}catch(e){}
+  if(name==="opskrifter")renderRecipes();
+  if(name==="indkob")renderShop();
+  window.scrollTo(0,0);
+}
+document.querySelectorAll(".tabbtn").forEach(b=>b.addEventListener("click",()=>switchTab(b.dataset.tab)));
+
+let startTab="ugeplan";try{startTab=localStorage.getItem("madplan_tab")||"ugeplan";}catch(e){}
+switchTab(startTab);
 </script>
 </body>
 </html>
