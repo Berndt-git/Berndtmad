@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Madplanen – Indkøbsdashboard</title>
+<style>
+  :root{
+    --green:#2E6B4F; --green-d:#21503b; --cream:#F7F4EC; --sage:#E8F0EB;
+    --ink:#2B2B2B; --muted:#7C8A82; --line:#DDE5DF; --terra:#C26A3D; --tomato:#C0392B;
+    --card:#FFFFFF;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--cream);color:var(--ink);
+    font-family:"Segoe UI",system-ui,-apple-system,Roboto,Helvetica,Arial,sans-serif;line-height:1.45}
+  header{background:var(--green);color:#fff;padding:22px 26px}
+  header h1{margin:0;font-size:1.5rem;font-weight:700;letter-spacing:.2px}
+  header p{margin:4px 0 0;opacity:.85;font-size:.9rem}
+  .wrap{display:grid;grid-template-columns:1fr 420px;gap:24px;padding:24px;max-width:1200px;margin:0 auto}
+  @media(max-width:880px){.wrap{grid-template-columns:1fr}}
+  h2{font-size:.78rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);margin:0 0 10px}
+  .slot{margin-bottom:18px}
+  .slot-title{font-size:.72rem;text-transform:uppercase;letter-spacing:2px;color:var(--green);
+    font-weight:700;border-bottom:2px solid var(--sage);padding-bottom:5px;margin-bottom:8px}
+  .dish{display:flex;align-items:center;gap:12px;padding:9px 12px;border:1px solid var(--line);
+    border-radius:10px;background:var(--card);margin-bottom:6px;cursor:pointer;transition:.12s}
+  .dish:hover{border-color:var(--green);box-shadow:0 1px 6px rgba(46,107,79,.08)}
+  .dish.on{background:var(--sage);border-color:var(--green)}
+  .dish input{width:18px;height:18px;accent-color:var(--green);cursor:pointer;flex:none}
+  .dish .name{flex:1;font-weight:600;font-size:.95rem}
+  .dish .stats{font-size:.72rem;color:var(--muted);white-space:nowrap}
+  .dish .tag{font-size:.6rem;text-transform:uppercase;letter-spacing:.5px;color:var(--terra);font-weight:700}
+  /* right panel */
+  .panel{position:sticky;top:24px;align-self:start}
+  .summary{background:var(--green);color:#fff;border-radius:14px;padding:16px 18px;margin-bottom:16px}
+  .sumgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px 16px;margin-top:6px}
+  .kpi .v{font-size:1.25rem;font-weight:700}
+  .kpi .l{font-size:.68rem;text-transform:uppercase;letter-spacing:1px;opacity:.8}
+  .status{margin-top:12px;padding:8px 12px;border-radius:8px;font-size:.85rem;font-weight:600;background:rgba(255,255,255,.15)}
+  .status.over{background:var(--tomato)}
+  .list{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 18px}
+  .list-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+  .toggle{font-size:.8rem;color:var(--muted);display:flex;align-items:center;gap:6px;cursor:pointer}
+  .cat{margin-top:14px}
+  .cat:first-child{margin-top:0}
+  .cat h3{font-size:.74rem;text-transform:uppercase;letter-spacing:1.2px;color:var(--green);
+    margin:0 0 6px;display:flex;align-items:center;gap:8px}
+  .cat.pantry h3{color:var(--muted)}
+  .item{display:flex;gap:9px;align-items:flex-start;padding:4px 0;font-size:.92rem;border-bottom:1px dashed var(--line)}
+  .item:last-child{border-bottom:none}
+  .item input{margin-top:3px;accent-color:var(--green)}
+  .item .q{color:var(--muted);font-size:.85rem;margin-left:auto;white-space:nowrap;padding-left:8px}
+  .item.checked label{text-decoration:line-through;color:var(--muted)}
+  .btns{display:flex;gap:8px;margin-top:14px}
+  button{font:inherit;border:1px solid var(--green);background:var(--card);color:var(--green);
+    padding:8px 14px;border-radius:9px;cursor:pointer;font-weight:600;font-size:.85rem;transition:.12s}
+  button:hover{background:var(--sage)}
+  button.primary{background:var(--green);color:#fff}
+  button.primary:hover{background:var(--green-d)}
+  .empty{color:var(--muted);font-style:italic;padding:14px 0;text-align:center;font-size:.9rem}
+  .foot{max-width:1200px;margin:0 auto;padding:6px 24px 30px;color:var(--muted);font-size:.78rem}
+  /* personlig portionslag (Berndt) */
+  .mine{font-size:.62rem;font-weight:700;letter-spacing:.3px;white-space:nowrap;flex:none;
+    padding:2px 7px;border-radius:999px;border:1px solid transparent}
+  .mine.ok{color:var(--green-d);background:var(--sage);border-color:#cfe3d7}
+  .mine.trim{color:#8a4a22;background:#F6E7DA;border-color:#e6c9ad}
+  .mine-card{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--terra);
+    border-radius:14px;padding:14px 16px;margin-bottom:16px}
+  .mine-head{font-size:.92rem;font-weight:700;color:var(--ink)}
+  .mine-sub{font-size:.72rem;color:var(--muted);margin-top:2px;margin-bottom:8px}
+  .mine-body{font-size:.86rem;line-height:1.5}
+  .mine-line{margin-bottom:6px}
+  .mine-line b{color:var(--green-d)}
+  .trim-line{color:#8a4a22}
+  .mine-note{margin-top:8px;padding-top:8px;border-top:1px dashed var(--line);color:var(--muted);font-size:.8rem}
+  .mine-empty{color:var(--muted);font-style:italic}
+</style>
+</head>
+<body>
+<header>
+  <h1>Madplanen · Indkøbsdashboard</h1>
+  <p>Sæt kryds ved ugens retter — indkøbslisten samler og sorterer sig selv efter butiksruten.</p>
+</header>
+
+<div class="wrap">
+  <section>
+    <h2>Vælg ugens retter</h2>
+    <div id="dishes"></div>
+  </section>
+
+  <aside class="panel">
+    <div class="summary">
+      <div style="font-size:.74rem;text-transform:uppercase;letter-spacing:1.5px;opacity:.85">Ugens overblik</div>
+      <div class="sumgrid">
+        <div class="kpi"><div class="v" id="kPris">0 kr</div><div class="l">Aftensmad</div></div>
+        <div class="kpi"><div class="v" id="kAntal">0</div><div class="l">Retter valgt</div></div>
+        <div class="kpi"><div class="v" id="kProt">– g</div><div class="l">Snit protein</div></div>
+        <div class="kpi"><div class="v" id="kFib">– g</div><div class="l">Snit fiber</div></div>
+      </div>
+      <div class="status" id="status">Vælg retter for at se status</div>
+    </div>
+
+    <div class="mine-card">
+      <div class="mine-head">Din portion · Berndt</div>
+      <div class="mine-sub">Maks 900 kcal pr. aftensmåltid · 2.100 kcal/dag</div>
+      <div id="mineBody" class="mine-body"><div class="mine-empty">Vælg aftener for at se dine portioner.</div></div>
+    </div>
+
+    <div class="list">
+      <div class="list-head">
+        <h2 style="margin:0">Indkøbsliste</h2>
+        <label class="toggle"><input type="checkbox" id="hidePantry" checked> Skjul basisvarer</label>
+      </div>
+      <div id="shopping"><div class="empty">Ingen retter valgt endnu.</div></div>
+      <div class="btns">
+        <button class="primary" id="copyBtn">Kopiér liste</button>
+        <button id="clearBtn">Ryd valg</button>
+      </div>
+    </div>
+  </aside>
+</div>
+<div class="foot">Dyr protein tæller op mod 2/uge · aftensbudget 1.010 kr · basisvarer skjules som standard (de står i Basisvarelager-noten).</div>
+
+<script>
+const CATS=["Frugt & grønt","Brød","Mejeri","Kød & fisk","Frost","Kolonial"];
+const ICON={"Frugt & grønt":"🥬","Brød":"🍞","Mejeri":"🧀","Kød & fisk":"🍗","Frost":"❄️","Kolonial":"🥫"};
+const BUDGET=1010, DYRMAX=2;
+// Berndt: personligt loft pr. aftensmaaltid + dagsbudget (kcal)
+const MAALTID_MAKS=900, DAGSBUDGET=2100;
+
+// n=navn, q=mængde, u=enhed, c=kategori, p=basisvare
+const D=[
+ {id:"laks",name:"Ovnbagt laks",slot:"Fisk",pris:190,prot:37,fib:8,kcal:620,vaegt:480,dyr:1,ing:[
+   {n:"Laksefilet",q:450,u:"g",c:"Kød & fisk"},{n:"Små kartofler",q:800,u:"g",c:"Frugt & grønt"},
+   {n:"Squash",q:1,u:"stk",c:"Frugt & grønt"},{n:"Citron",q:1,u:"stk",c:"Frugt & grønt"},
+   {n:"Frisk persille/dild",q:1,u:"bundt",c:"Frugt & grønt"},{n:"Skyr",q:200,u:"g",c:"Mejeri"},
+   {n:"Ærter",q:200,u:"g",c:"Frost",p:1},{n:"Hvidløg",q:1,u:"fed",c:"Frugt & grønt",p:1}]},
+ {id:"fiskefrik",name:"Fiskefrikadeller",slot:"Fisk",pris:150,prot:32,fib:9,kcal:650,vaegt:470,dyr:0,ing:[
+   {n:"Torske-/sejfars",q:500,u:"g",c:"Kød & fisk"},{n:"Kartofler",q:800,u:"g",c:"Frugt & grønt"},
+   {n:"Skyr",q:250,u:"g",c:"Mejeri"},{n:"Mayonnaise",q:2,u:"spsk",c:"Kolonial"},
+   {n:"Citron",q:1,u:"stk",c:"Frugt & grønt"},{n:"Frisk dild",q:1,u:"bundt",c:"Frugt & grønt"},
+   {n:"Ærter",q:200,u:"g",c:"Frost",p:1},{n:"Æg",q:1,u:"stk",c:"Mejeri",p:1},
+   {n:"Havregryn",q:2,u:"spsk",c:"Kolonial",p:1}]},
+ {id:"torsk",name:"Bagt torsk",slot:"Fisk",pris:150,prot:34,fib:9,kcal:560,vaegt:480,dyr:0,ing:[
+   {n:"Torskefilet",q:500,u:"g",c:"Kød & fisk"},{n:"Fuldkornsris",q:250,u:"g",c:"Kolonial",p:1},
+   {n:"Broccoli",q:1,u:"stk",c:"Frugt & grønt"},{n:"Skyr",q:150,u:"g",c:"Mejeri"},
+   {n:"Citron",q:1,u:"stk",c:"Frugt & grønt"},{n:"Frisk dild",q:1,u:"bundt",c:"Frugt & grønt"},
+   {n:"Hvidløg",q:1,u:"fed",c:"Frugt & grønt",p:1}]},
+ {id:"kyldeller",name:"Kyllingedeller",slot:"Fars",pris:140,prot:35,fib:11,kcal:600,vaegt:470,dyr:0,ing:[
+   {n:"Kyllingefars",q:500,u:"g",c:"Kød & fisk"},{n:"Gulerødder",q:3,u:"stk",c:"Frugt & grønt"},
+   {n:"Pastinak",q:2,u:"stk",c:"Frugt & grønt"},{n:"Kartofler",q:600,u:"g",c:"Frugt & grønt"},
+   {n:"Ærter",q:200,u:"g",c:"Frost",p:1},{n:"Skyr",q:150,u:"g",c:"Mejeri"},
+   {n:"Citron",q:1,u:"stk",c:"Frugt & grønt"},{n:"Frisk persille",q:1,u:"bundt",c:"Frugt & grønt"},
+   {n:"Æg",q:1,u:"stk",c:"Mejeri",p:1},{n:"Rasp",q:2,u:"spsk",c:"Kolonial",p:1},
+   {n:"Hvidløg",q:2,u:"fed",c:"Frugt & grønt",p:1}]},
+ {id:"oksebof",name:"Oksebøffer",slot:"Fars",pris:150,prot:36,fib:9,kcal:780,vaegt:470,dyr:0,ing:[
+   {n:"Hakket oksekød",q:500,u:"g",c:"Kød & fisk"},{n:"Kartofler",q:800,u:"g",c:"Frugt & grønt"},
+   {n:"Ærter",q:250,u:"g",c:"Frost",p:1},{n:"Madlavningsfløde",q:1,u:"dl",c:"Mejeri"},
+   {n:"Oksebouillon",c:"Kolonial",p:1},{n:"Æg",q:1,u:"stk",c:"Mejeri",p:1},
+   {n:"Mælk",q:1,u:"dl",c:"Mejeri",p:1},{n:"Mel",c:"Kolonial",p:1}]},
+ {id:"kodboller",name:"Kyllingekødboller i tomatsauce",slot:"Fars",pris:120,prot:34,fib:10,kcal:680,vaegt:450,dyr:0,ing:[
+   {n:"Kyllingefars",q:500,u:"g",c:"Kød & fisk"},{n:"Hakkede tomater",q:2,u:"dåser",c:"Kolonial",p:1},
+   {n:"Tomatpuré",c:"Kolonial",p:1},{n:"Fuldkornspasta",q:300,u:"g",c:"Kolonial",p:1},
+   {n:"Parmesan",q:30,u:"g",c:"Mejeri",p:1},{n:"Æg",q:1,u:"stk",c:"Mejeri",p:1},
+   {n:"Rasp",q:2,u:"spsk",c:"Kolonial",p:1},{n:"Hvidløg",q:2,u:"fed",c:"Frugt & grønt",p:1}]},
+ {id:"kodsovs",name:"Pasta med kødsovs",slot:"Fars",pris:130,prot:35,fib:9,kcal:720,vaegt:450,dyr:0,ing:[
+   {n:"Hakket oksekød",q:400,u:"g",c:"Kød & fisk"},{n:"Bladselleri",q:2,u:"stængler",c:"Frugt & grønt"},
+   {n:"Gulerødder",q:3,u:"stk",c:"Frugt & grønt"},{n:"Hakkede tomater",q:2,u:"dåser",c:"Kolonial",p:1},
+   {n:"Tomatpuré",c:"Kolonial",p:1},{n:"Fuldkornspasta",q:300,u:"g",c:"Kolonial",p:1},
+   {n:"Parmesan",q:40,u:"g",c:"Mejeri",p:1},{n:"Hvidløg",q:2,u:"fed",c:"Frugt & grønt",p:1}]},
+ {id:"karry",name:"Boller i karry",slot:"Fars",pris:120,prot:34,fib:8,kcal:740,vaegt:480,dyr:0,ing:[
+   {n:"Kalv-/flæskefars",q:500,u:"g",c:"Kød & fisk"},{n:"Ris",q:250,u:"g",c:"Kolonial",p:1},
+   {n:"Gulerødder",q:3,u:"stk",c:"Frugt & grønt"},{n:"Ærter",q:200,u:"g",c:"Frost",p:1},
+   {n:"Mælk",q:4,u:"dl",c:"Mejeri",p:1},{n:"Æg",q:1,u:"stk",c:"Mejeri",p:1},
+   {n:"Rasp",q:2,u:"spsk",c:"Kolonial",p:1}]},
+ {id:"wok",name:"Oksewok",slot:"Fars",pris:130,prot:35,fib:11,kcal:680,vaegt:430,dyr:0,ing:[
+   {n:"Strimlet oksekød",q:400,u:"g",c:"Kød & fisk"},{n:"Fuldkornsnudler",q:200,u:"g",c:"Kolonial",p:1},
+   {n:"Broccoli",q:1,u:"stk",c:"Frugt & grønt"},{n:"Peberfrugt",q:1,u:"stk",c:"Frugt & grønt"},
+   {n:"Gulerødder",q:2,u:"stk",c:"Frugt & grønt"},{n:"Ærter",q:200,u:"g",c:"Frost",p:1},
+   {n:"Frisk ingefær",q:1,u:"stk",c:"Frugt & grønt"},{n:"Hvidløg",q:2,u:"fed",c:"Frugt & grønt",p:1},
+   {n:"Sojasauce",c:"Kolonial",p:1}]},
+ {id:"krempasta",name:"Cremet kylling-fuldkornspasta",slot:"Kylling",pris:120,prot:38,fib:10,kcal:760,vaegt:440,dyr:0,ing:[
+   {n:"Kyllingebryst",q:400,u:"g",c:"Kød & fisk"},{n:"Fuldkornspasta",q:300,u:"g",c:"Kolonial",p:1},
+   {n:"Soltørrede tomater",q:80,u:"g",c:"Kolonial"},{n:"Frisk spinat",q:1,u:"pose",c:"Frugt & grønt"},
+   {n:"Madlavningsfløde",q:2,u:"dl",c:"Mejeri"},{n:"Skyr",q:2,u:"spsk",c:"Mejeri"},
+   {n:"Parmesan",q:40,u:"g",c:"Mejeri",p:1},{n:"Hvidløg",q:2,u:"fed",c:"Frugt & grønt",p:1}]},
+ {id:"kokoskarry",name:"Kokos-kyllingekarry",slot:"Kylling",pris:130,prot:35,fib:10,kcal:720,vaegt:480,dyr:0,ing:[
+   {n:"Kylling",q:400,u:"g",c:"Kød & fisk"},{n:"Fuldkornsris",q:250,u:"g",c:"Kolonial",p:1},
+   {n:"Kokosmælk",q:1,u:"dåse",c:"Kolonial",p:1},{n:"Gulerødder",q:2,u:"stk",c:"Frugt & grønt"},
+   {n:"Peberfrugt",q:1,u:"stk",c:"Frugt & grønt"},{n:"Ærter",q:200,u:"g",c:"Frost",p:1},
+   {n:"Lime",q:1,u:"stk",c:"Frugt & grønt"},{n:"Hvidløg",q:2,u:"fed",c:"Frugt & grønt",p:1}]},
+ {id:"overlaar",name:"Ovnstegt kyllingeoverlår",slot:"Kylling",pris:120,prot:33,fib:9,kcal:700,vaegt:460,dyr:0,ing:[
+   {n:"Kyllingeoverlår",q:6,u:"stk",c:"Kød & fisk"},{n:"Gulerødder",q:3,u:"stk",c:"Frugt & grønt"},
+   {n:"Pastinak",q:2,u:"stk",c:"Frugt & grønt"},{n:"Kartofler",q:600,u:"g",c:"Frugt & grønt"},
+   {n:"Skyr",q:150,u:"g",c:"Mejeri"},{n:"Citron",q:1,u:"stk",c:"Frugt & grønt"},
+   {n:"Frisk persille",q:1,u:"bundt",c:"Frugt & grønt"},{n:"Hvidløg",q:2,u:"fed",c:"Frugt & grønt",p:1}]},
+ {id:"frittata",name:"Grøn frittata",slot:"Grøn",pris:100,prot:31,fib:8,kcal:560,vaegt:400,dyr:0,ing:[
+   {n:"Æg",q:8,u:"stk",c:"Mejeri",p:1},{n:"Squash",q:1,u:"stk",c:"Frugt & grønt"},
+   {n:"Peberfrugt",q:1,u:"stk",c:"Frugt & grønt"},{n:"Frisk spinat",q:1,u:"pose",c:"Frugt & grønt"},
+   {n:"Feta",q:100,u:"g",c:"Mejeri"},{n:"Mælk",q:1,u:"dl",c:"Mejeri",p:1},
+   {n:"Hytteost",q:200,u:"g",c:"Mejeri"},{n:"Fuldkornsbrød",q:1,u:"stk",c:"Brød"},
+   {n:"Hvidløg",q:1,u:"fed",c:"Frugt & grønt",p:1}]},
+ {id:"aertepasta",name:"Cremet pasta med ærter og feta",slot:"Grøn",pris:110,prot:30,fib:11,kcal:660,vaegt:430,dyr:0,ing:[
+   {n:"Fuldkornspasta",q:300,u:"g",c:"Kolonial",p:1},{n:"Ærter",q:250,u:"g",c:"Frost",p:1},
+   {n:"Frisk spinat",q:1,u:"pose",c:"Frugt & grønt"},{n:"Feta",q:100,u:"g",c:"Mejeri"},
+   {n:"Madlavningsfløde",q:2,u:"dl",c:"Mejeri"},{n:"Parmesan",q:30,u:"g",c:"Mejeri",p:1},
+   {n:"Æg",q:2,u:"stk",c:"Mejeri",p:1},{n:"Citron",q:1,u:"stk",c:"Frugt & grønt"},
+   {n:"Hvidløg",q:2,u:"fed",c:"Frugt & grønt",p:1}]},
+ {id:"halloumi",name:"Halloumi-bowl",slot:"Grøn",pris:120,prot:30,fib:9,kcal:860,vaegt:450,dyr:0,ing:[
+   {n:"Halloumi",q:450,u:"g",c:"Mejeri"},{n:"Fuldkornsris",q:250,u:"g",c:"Kolonial",p:1},
+   {n:"Squash",q:1,u:"stk",c:"Frugt & grønt"},{n:"Peberfrugt",q:1,u:"stk",c:"Frugt & grønt"},
+   {n:"Gulerødder",q:2,u:"stk",c:"Frugt & grønt"},{n:"Skyr",q:150,u:"g",c:"Mejeri"},
+   {n:"Citron",q:1,u:"stk",c:"Frugt & grønt"},{n:"Hvidløg",q:1,u:"fed",c:"Frugt & grønt",p:1}]},
+ {id:"risotto",name:"Svampe-risotto",slot:"Andet",pris:110,prot:22,fib:6,kcal:780,vaegt:450,dyr:0,ing:[
+   {n:"Risottoris",q:250,u:"g",c:"Kolonial",p:1},{n:"Svampe",q:200,u:"g",c:"Frugt & grønt"},
+   {n:"Bacon",q:150,u:"g",c:"Kød & fisk"},{n:"Ærter",q:200,u:"g",c:"Frost",p:1},
+   {n:"Hvidvin",q:1,u:"dl",c:"Kolonial"},{n:"Bouillon",c:"Kolonial",p:1},
+   {n:"Parmesan",q:50,u:"g",c:"Mejeri",p:1},{n:"Hvidløg",q:2,u:"fed",c:"Frugt & grønt",p:1}]},
+ {id:"polseret",name:"Svensk pølseret",slot:"Andet",pris:90,prot:24,fib:7,kcal:820,vaegt:470,dyr:0,ing:[
+   {n:"Pølser (løgfri)",q:450,u:"g",c:"Kød & fisk"},{n:"Ris",q:250,u:"g",c:"Kolonial",p:1},
+   {n:"Hakkede tomater",q:1,u:"dåse",c:"Kolonial",p:1},{n:"Tomatpuré",c:"Kolonial",p:1},
+   {n:"Peberfrugt",q:1,u:"stk",c:"Frugt & grønt"},{n:"Madlavningsfløde",q:1,u:"dl",c:"Mejeri"},
+   {n:"Hvidløg",q:2,u:"fed",c:"Frugt & grønt",p:1}]},
+ {id:"stegtflaesk",name:"Stegt flæsk med persillesovs",slot:"Andet",pris:110,prot:29,fib:6,kcal:1150,vaegt:450,dyr:0,ing:[
+   {n:"Stegeflæsk",q:550,u:"g",c:"Kød & fisk"},{n:"Kartofler",q:800,u:"g",c:"Frugt & grønt"},
+   {n:"Mælk",q:5,u:"dl",c:"Mejeri",p:1},{n:"Frisk persille",q:1,u:"bundt",c:"Frugt & grønt"},
+   {n:"Ærter",q:200,u:"g",c:"Frost",p:1},{n:"Smør",c:"Mejeri",p:1},{n:"Mel",c:"Kolonial",p:1}]},
+ {id:"wraps",name:"Wraps / tortillapizza",slot:"Rest",pris:80,prot:30,fib:9,kcal:680,vaegt:400,dyr:0,ing:[
+   {n:"Fuldkornstortillas",q:1,u:"pakke",c:"Brød"},{n:"Revet ost",q:125,u:"g",c:"Mejeri"},
+   {n:"Majs",q:1,u:"dåse",c:"Kolonial",p:1},{n:"Peberfrugt",q:1,u:"stk",c:"Frugt & grønt"},
+   {n:"Gulerødder",q:2,u:"stk",c:"Frugt & grønt"},{n:"Agurk",q:1,u:"stk",c:"Frugt & grønt"},
+   {n:"Cherrytomater",q:1,u:"bakke",c:"Frugt & grønt"},{n:"Skyr",q:1,u:"klat",c:"Mejeri"}]},
+ {id:"aegris",name:"Æg-stegte fuldkornsris",slot:"Rest",pris:70,prot:30,fib:7,kcal:560,vaegt:420,dyr:0,ing:[
+   {n:"Fuldkornsris",q:250,u:"g",c:"Kolonial",p:1},{n:"Æg",q:4,u:"stk",c:"Mejeri",p:1},
+   {n:"Gulerødder",q:2,u:"stk",c:"Frugt & grønt"},{n:"Ærter",q:200,u:"g",c:"Frost",p:1},
+   {n:"Sojasauce",c:"Kolonial",p:1},{n:"Hvidløg",q:2,u:"fed",c:"Frugt & grønt",p:1}]},
+ {id:"nacho",name:"Nachofad",slot:"Rest",pris:80,prot:30,fib:8,kcal:820,vaegt:380,dyr:0,ing:[
+   {n:"Fuldkornsnachos",q:1,u:"pose",c:"Kolonial"},{n:"Revet ost",q:150,u:"g",c:"Mejeri"},
+   {n:"Majs",q:1,u:"dåse",c:"Kolonial",p:1},{n:"Hakkede tomater",q:1,u:"dåse",c:"Kolonial",p:1},
+   {n:"Peberfrugt",q:1,u:"stk",c:"Frugt & grønt"},{n:"Skyr",q:1,u:"klat",c:"Mejeri"},
+   {n:"Hvidløg",q:2,u:"fed",c:"Frugt & grønt",p:1}]},
+ {id:"frikadeller",name:"Frikadeller",slot:"Fars",pris:130,prot:33,fib:6,kcal:700,vaegt:460,dyr:0,ing:[
+   {n:"Hakket kalv/flæsk",q:500,u:"g",c:"Kød & fisk"},{n:"Kartofler",q:800,u:"g",c:"Frugt & grønt"},
+   {n:"Ærter",q:200,u:"g",c:"Frost",p:1},{n:"Æg",q:1,u:"stk",c:"Mejeri",p:1},
+   {n:"Rasp",q:3,u:"spsk",c:"Kolonial",p:1},{n:"Mælk",q:1,u:"dl",c:"Mejeri",p:1}]},
+ {id:"chili",name:"Chili con carne",slot:"Fars",pris:130,prot:35,fib:14,kcal:880,vaegt:560,dyr:0,ing:[
+   {n:"Hakket oksekød",q:500,u:"g",c:"Kød & fisk"},{n:"Kidneybønner",q:1,u:"dåse",c:"Kolonial"},
+   {n:"Hakkede tomater",q:1,u:"dåse",c:"Kolonial",p:1},{n:"Majs",q:1,u:"dåse",c:"Kolonial",p:1},
+   {n:"Peberfrugt",q:1,u:"stk",c:"Frugt & grønt"},{n:"Ris",q:250,u:"g",c:"Kolonial",p:1},
+   {n:"Nachos",q:1,u:"pose",c:"Kolonial"},{n:"Revet ost",q:100,u:"g",c:"Mejeri"},
+   {n:"Skyr",q:1,u:"klat",c:"Mejeri"},{n:"Hvidløg",q:2,u:"fed",c:"Frugt & grønt",p:1}]},
+ {id:"lasagne",name:"Lasagne",slot:"Fars",pris:140,prot:34,fib:8,kcal:950,vaegt:420,dyr:0,ing:[
+   {n:"Hakket oksekød",q:400,u:"g",c:"Kød & fisk"},{n:"Hakkede tomater",q:2,u:"dåser",c:"Kolonial",p:1},
+   {n:"Lasagneplader",q:1,u:"pakke",c:"Kolonial"},{n:"Gulerødder",q:2,u:"stk",c:"Frugt & grønt"},
+   {n:"Revet ost",q:100,u:"g",c:"Mejeri"},{n:"Parmesan",q:30,u:"g",c:"Mejeri",p:1},
+   {n:"Mælk",q:5,u:"dl",c:"Mejeri",p:1},{n:"Mel",c:"Kolonial",p:1},{n:"Smør",c:"Mejeri",p:1},
+   {n:"Hvidløg",q:2,u:"fed",c:"Frugt & grønt",p:1}]},
+ {id:"tikka",name:"Kylling tikka masala",slot:"Kylling",pris:130,prot:36,fib:8,kcal:700,vaegt:470,dyr:0,ing:[
+   {n:"Kyllingebryst",q:500,u:"g",c:"Kød & fisk"},{n:"Hakkede tomater",q:1,u:"dåse",c:"Kolonial",p:1},
+   {n:"Madlavningsfløde",q:1,u:"dl",c:"Mejeri"},{n:"Skyr",q:150,u:"g",c:"Mejeri"},
+   {n:"Ris",q:250,u:"g",c:"Kolonial",p:1},{n:"Frisk ingefær",q:1,u:"stk",c:"Frugt & grønt"},
+   {n:"Hvidløg",q:2,u:"fed",c:"Frugt & grønt",p:1}]},
+ {id:"paprika",name:"Paprikagryde",slot:"Andet",pris:130,prot:32,fib:7,kcal:720,vaegt:470,dyr:0,ing:[
+   {n:"Kylling/svinekød",q:500,u:"g",c:"Kød & fisk"},{n:"Peberfrugt",q:2,u:"stk",c:"Frugt & grønt"},
+   {n:"Hakkede tomater",q:2,u:"dåser",c:"Kolonial",p:1},{n:"Creme fraiche",q:1,u:"dl",c:"Mejeri"},
+   {n:"Ris",q:250,u:"g",c:"Kolonial",p:1},{n:"Hvidløg",q:2,u:"fed",c:"Frugt & grønt",p:1}]},
+ {id:"pizza",name:"Hjemmelavet pizza",slot:"Andet",pris:110,prot:30,fib:6,kcal:850,vaegt:380,dyr:0,ing:[
+   {n:"Mel",q:300,u:"g",c:"Kolonial",p:1},{n:"Gær",q:1,u:"pk",c:"Kolonial"},
+   {n:"Passata",q:1,u:"dåse",c:"Kolonial",p:1},{n:"Mozzarella/revet ost",q:200,u:"g",c:"Mejeri"},
+   {n:"Skinke",q:100,u:"g",c:"Kød & fisk"},{n:"Peberfrugt",q:1,u:"stk",c:"Frugt & grønt"},
+   {n:"Majs",q:1,u:"dåse",c:"Kolonial",p:1},{n:"Hvidløg",q:1,u:"fed",c:"Frugt & grønt",p:1}]},
+ {id:"suppe",name:"Bagte grøntsagssuppe",slot:"Grøn",pris:90,prot:15,fib:9,kcal:520,vaegt:520,dyr:0,ing:[
+   {n:"Tomater",q:500,u:"g",c:"Frugt & grønt"},{n:"Peberfrugt",q:2,u:"stk",c:"Frugt & grønt"},
+   {n:"Gulerødder",q:2,u:"stk",c:"Frugt & grønt"},{n:"Squash",q:1,u:"stk",c:"Frugt & grønt"},
+   {n:"Bouillon",c:"Kolonial",p:1},{n:"Madlavningsfløde",q:1,u:"dl",c:"Mejeri"},
+   {n:"Fuldkornsbrød",q:1,u:"stk",c:"Brød"},{n:"Revet ost",q:100,u:"g",c:"Mejeri"},
+   {n:"Hvidløg",q:4,u:"fed",c:"Frugt & grønt",p:1}]},
+ {id:"pita",name:"Pitabrød med fyld",slot:"Andet",pris:120,prot:32,fib:8,kcal:760,vaegt:460,dyr:0,ing:[
+   {n:"Pitabrød",q:6,u:"stk",c:"Brød"},{n:"Kylling/oksefars",q:450,u:"g",c:"Kød & fisk"},
+   {n:"Agurk",q:1,u:"stk",c:"Frugt & grønt"},{n:"Tomater",q:2,u:"stk",c:"Frugt & grønt"},
+   {n:"Salat",q:1,u:"stk",c:"Frugt & grønt"},{n:"Gulerødder",q:2,u:"stk",c:"Frugt & grønt"},
+   {n:"Skyr",q:150,u:"g",c:"Mejeri"},{n:"Feta",q:100,u:"g",c:"Mejeri"},
+   {n:"Hvidløg",q:1,u:"fed",c:"Frugt & grønt",p:1}]},
+ {id:"carbonara",name:"Spaghetti carbonara",slot:"Andet",pris:110,prot:30,fib:8,kcal:820,vaegt:430,dyr:0,ing:[
+   {n:"Fuldkornsspaghetti",q:300,u:"g",c:"Kolonial",p:1},{n:"Bacon",q:150,u:"g",c:"Kød & fisk"},
+   {n:"Æg",q:5,u:"stk",c:"Mejeri",p:1},{n:"Parmesan",q:50,u:"g",c:"Mejeri",p:1},
+   {n:"Ærter",q:200,u:"g",c:"Frost",p:1},{n:"Hvidløg",q:1,u:"fed",c:"Frugt & grønt",p:1}]},
+ {id:"tapas",name:"Tapas",slot:"Andet",pris:150,prot:27,fib:7,kcal:800,vaegt:420,dyr:0,ing:[
+   {n:"Serranoskinke",q:100,u:"g",c:"Kød & fisk"},{n:"Chorizo (løgfri)",q:100,u:"g",c:"Kød & fisk"},
+   {n:"Oliven",q:1,u:"bæger",c:"Kolonial"},{n:"Manchego/ost",q:150,u:"g",c:"Mejeri"},
+   {n:"Brød",q:1,u:"stk",c:"Brød"},{n:"Peberfrugt",q:1,u:"stk",c:"Frugt & grønt"},
+   {n:"Cherrytomater",q:1,u:"bakke",c:"Frugt & grønt"},{n:"Kartofler",q:400,u:"g",c:"Frugt & grønt"},
+   {n:"Æg",q:4,u:"stk",c:"Mejeri",p:1},{n:"Hvidløg",q:1,u:"fed",c:"Frugt & grønt",p:1}]},
+ {id:"padthai",name:"Pad thai",slot:"Andet",pris:120,prot:33,fib:7,kcal:760,vaegt:480,dyr:0,ing:[
+   {n:"Risnudler",q:250,u:"g",c:"Kolonial"},{n:"Kyllingebryst",q:400,u:"g",c:"Kød & fisk"},
+   {n:"Æg",q:3,u:"stk",c:"Mejeri",p:1},{n:"Tamarindpasta",q:1,u:"glas",c:"Kolonial"},
+   {n:"Fiskesauce",c:"Kolonial",p:1},{n:"Bønnespirer",q:100,u:"g",c:"Frugt & grønt"},
+   {n:"Gulerødder",q:2,u:"stk",c:"Frugt & grønt"},{n:"Peanuts",q:1,u:"håndfuld",c:"Kolonial"},
+   {n:"Lime",q:1,u:"stk",c:"Frugt & grønt"},{n:"Hvidløg",q:2,u:"fed",c:"Frugt & grønt",p:1}]},
+];
+
+const SLOTS=["Fisk","Kylling","Fars","Andet","Grøn","Rest"];
+let sel=new Set(), checkedItems=new Set();
+try{const s=JSON.parse(localStorage.getItem("madplan_sel")||"[]");s.forEach(x=>sel.add(x));}catch(e){}
+
+const dishesEl=document.getElementById("dishes");
+SLOTS.forEach(slot=>{
+  const inSlot=D.filter(d=>d.slot===slot); if(!inSlot.length)return;
+  const wrap=document.createElement("div");wrap.className="slot";
+  wrap.innerHTML=`<div class="slot-title">${slot}</div>`;
+  inSlot.forEach(d=>{
+    const row=document.createElement("label");row.className="dish"+(sel.has(d.id)?" on":"");
+    row.innerHTML=`<input type="checkbox" ${sel.has(d.id)?"checked":""}>
+      <span class="name">${d.name} ${d.dyr?'<span class="tag">dyr</span>':''}</span>
+      <span class="stats">${d.pris} kr · ${d.prot} g P · ${d.fib} g fib · ${d.kcal} kcal</span>
+      ${portionBadge(d)}`;
+    row.querySelector("input").addEventListener("change",e=>{
+      if(e.target.checked){sel.add(d.id);row.classList.add("on");}
+      else{sel.delete(d.id);row.classList.remove("on");}
+      save();render();
+    });
+    wrap.appendChild(row);
+  });
+  dishesEl.appendChild(wrap);
+});
+
+function portionBadge(d){
+  const kc=d.kcal, w=d.vaegt;
+  if(kc==null||w==null) return "";
+  if(kc<=MAALTID_MAKS){
+    return `<span class="mine ok" title="Din portion (Berndt): v\u00e6g ca. ${w} g \u2013 fuld voksenportion, ${kc} kcal (under ${MAALTID_MAKS})">din: ~${w} g</span>`;
+  }
+  const pct=Math.round(MAALTID_MAKS/kc*100);
+  const wt=Math.round(w*MAALTID_MAKS/kc/10)*10;
+  return `<span class="mine trim" title="Din portion (Berndt): v\u00e6g ca. ${wt} g (\u2248${pct}% af voksenportionen p\u00e5 ${w} g / ${kc} kcal) for at ramme ${MAALTID_MAKS} kcal">din: ~${wt} g</span>`;
+}
+
+function renderMine(){
+  const body=document.getElementById("mineBody"); if(!body) return;
+  const chosen=D.filter(d=>sel.has(d.id));
+  if(!chosen.length){body.innerHTML='<div class="mine-empty">V\u00e6lg aftener for at se dine portioner.</div>';return;}
+  const trim=chosen.filter(d=>d.kcal>MAALTID_MAKS).sort((a,b)=>b.kcal-a.kcal);
+  const wtrim=d=>Math.round(d.vaegt*MAALTID_MAKS/d.kcal/10)*10;
+  let html=`<div class="mine-line"><b>${chosen.length-trim.length}/${chosen.length}</b> aftener holder ${MAALTID_MAKS} kcal i fuld voksenportion.</div>`;
+  if(trim.length){
+    html+=`<div class="mine-line trim-line">V\u00e6g mindre: `+
+      trim.map(d=>`${d.name} \u2192 ~${wtrim(d)} g (${Math.round(MAALTID_MAKS/d.kcal*100)}%)`).join(" \u00b7 ")+`</div>`;
+  }
+  html+=`<div class="mine-note">\u00abdin: ~X g\u00bb = det du vejer p\u00e5 tallerkenen (ca., anrettet voksenportion). ${MAALTID_MAKS} kcal til aften levner ~${DAGSBUDGET-MAALTID_MAKS} kcal til morgenmad, frokost og snacks.</div>`;
+  body.innerHTML=html;
+}
+
+function save(){try{localStorage.setItem("madplan_sel",JSON.stringify([...sel]));}catch(e){}}
+
+function aggregate(){
+  const hide=document.getElementById("hidePantry").checked;
+  const map={}; // key -> {n,c,p,entries:[{q,u}]}
+  D.filter(d=>sel.has(d.id)).forEach(d=>d.ing.forEach(i=>{
+    if(hide&&i.p)return;
+    const key=i.n.toLowerCase();
+    if(!map[key])map[key]={n:i.n,c:i.c,p:i.p||0,entries:[]};
+    map[key].entries.push({q:i.q,u:i.u});
+  }));
+  return map;
+}
+function fmtQty(entries){
+  // sum where same unit & numeric; else join
+  const byU={};let hasNull=false;
+  entries.forEach(e=>{
+    if(e.q==null){hasNull=true;return;}
+    byU[e.u||""]=(byU[e.u||""]||0)+e.q;
+  });
+  const parts=Object.entries(byU).map(([u,q])=>`${+q.toFixed(2)} ${u}`.trim());
+  if(hasNull&&!parts.length)return "";
+  return parts.join(" + ");
+}
+
+function render(){
+  const chosen=D.filter(d=>sel.has(d.id));
+  const pris=chosen.reduce((a,d)=>a+d.pris,0);
+  const dyr=chosen.reduce((a,d)=>a+d.dyr,0);
+  document.getElementById("kPris").textContent=pris+" kr";
+  document.getElementById("kAntal").textContent=chosen.length;
+  document.getElementById("kProt").textContent=chosen.length?Math.round(chosen.reduce((a,d)=>a+d.prot,0)/chosen.length)+" g":"– g";
+  document.getElementById("kFib").textContent=chosen.length?Math.round(chosen.reduce((a,d)=>a+d.fib,0)/chosen.length)+" g":"– g";
+  const st=document.getElementById("status");
+  if(!chosen.length){st.className="status";st.textContent="Vælg retter for at se status";}
+  else{
+    const over=pris>BUDGET, dyrOver=dyr>DYRMAX;
+    st.className="status"+(over||dyrOver?" over":"");
+    st.textContent=(over?`⚠ ${pris-BUDGET} kr over budget`:`✓ ${BUDGET-pris} kr under budget`)+
+      ` · dyr protein ${dyr}/${DYRMAX}`+(dyrOver?" ⚠":"");
+  }
+
+  renderMine();
+  const map=aggregate(),host=document.getElementById("shopping");
+  if(!chosen.length){host.innerHTML='<div class="empty">Ingen retter valgt endnu.</div>';return;}
+  let html="";
+  const order=[...CATS];
+  order.forEach(cat=>{
+    const items=Object.values(map).filter(m=>m.c===cat&&!m.p);
+    if(!items.length)return;
+    html+=`<div class="cat"><h3>${ICON[cat]||""} ${cat}</h3>`;
+    items.sort((a,b)=>a.n.localeCompare(b.n,"da")).forEach(m=>{html+=itemRow(m);});
+    html+=`</div>`;
+  });
+  // pantry group (only when not hidden)
+  const pantry=Object.values(map).filter(m=>m.p);
+  if(pantry.length){
+    html+=`<div class="cat pantry"><h3>🧂 Basisvarer (tjek lager)</h3>`;
+    pantry.sort((a,b)=>a.n.localeCompare(b.n,"da")).forEach(m=>{html+=itemRow(m);});
+    html+=`</div>`;
+  }
+  host.innerHTML=html;
+  host.querySelectorAll(".item input").forEach(cb=>cb.addEventListener("change",e=>{
+    const k=e.target.dataset.k;
+    if(e.target.checked){checkedItems.add(k);e.target.closest(".item").classList.add("checked");}
+    else{checkedItems.delete(k);e.target.closest(".item").classList.remove("checked");}
+  }));
+}
+function itemRow(m){
+  const q=fmtQty(m.entries),k=m.n.toLowerCase(),ck=checkedItems.has(k);
+  return `<div class="item${ck?" checked":""}"><input type="checkbox" data-k="${k}" ${ck?"checked":""}>
+    <label>${m.n}</label><span class="q">${q}</span></div>`;
+}
+
+document.getElementById("hidePantry").addEventListener("change",render);
+document.getElementById("clearBtn").addEventListener("click",()=>{
+  sel.clear();checkedItems.clear();save();
+  document.querySelectorAll(".dish").forEach(r=>{r.classList.remove("on");r.querySelector("input").checked=false;});
+  render();
+});
+document.getElementById("copyBtn").addEventListener("click",()=>{
+  const map=aggregate();let txt="INDKØBSLISTE\n";
+  [...CATS].forEach(cat=>{
+    const items=Object.values(map).filter(m=>m.c===cat&&!m.p);
+    if(!items.length)return;txt+=`\n${cat.toUpperCase()}\n`;
+    items.sort((a,b)=>a.n.localeCompare(b.n,"da")).forEach(m=>{txt+=`- ${m.n} ${fmtQty(m.entries)}\n`;});
+  });
+  const pantry=Object.values(map).filter(m=>m.p);
+  if(pantry.length){txt+=`\nBASISVARER (TJEK LAGER)\n`;pantry.forEach(m=>{txt+=`- ${m.n} ${fmtQty(m.entries)}\n`;});}
+  navigator.clipboard.writeText(txt).then(()=>{
+    const b=document.getElementById("copyBtn");const o=b.textContent;b.textContent="Kopieret ✓";setTimeout(()=>b.textContent=o,1500);
+  }).catch(()=>alert("Kunne ikke kopiere automatisk."));
+});
+
+render();
+</script>
+</body>
+</html>
