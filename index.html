@@ -427,7 +427,52 @@ SLOTS.forEach(slot=>{
   dishesEl.appendChild(wrap);
 });
 
-function save(){try{localStorage.setItem("madplan_sel",JSON.stringify([...sel]));}catch(e){}}
+function save(){try{localStorage.setItem("madplan_sel",JSON.stringify([...sel]));}catch(e){} pushToCloud();}
+
+/* ===== Delt liste mellem telefoner (Firebase) =====
+   Udfyld firebaseConfig og HOUSEHOLD_ID med jeres egne værdier fra Firebase-konsollen.
+   Er de ikke udfyldt, kører appen videre helt som nu — bare uden deling mellem enheder. */
+const firebaseConfig = {
+  apiKey: "AIzaSyDoQ3dK2Tsjl8lzGTfASvQvRlgK-SsOTfw",
+  authDomain: "berndtmad-ca338.firebaseapp.com",
+  projectId: "berndtmad-ca338",
+  storageBucket: "berndtmad-ca338.firebasestorage.app",
+  messagingSenderId: "769778219577",
+  appId: "1:769778219577:web:13b46722705daf67806be8"
+};
+const HOUSEHOLD_ID = "Bargholz-8f3k2"; // fx "familienavn-8f3k2" — skal matche Firestore-reglen nøjagtigt
+
+let cloudRef=null, fsSetDoc=null;
+async function initCloud(){
+  if(firebaseConfig.apiKey==="UDFYLD_MIG")return; // ikke sat op endnu
+  try{
+    const {initializeApp}=await import("https://www.gstatic.com/firebasejs/12.17.1/firebase-app.js");
+    const {getFirestore,doc,setDoc,onSnapshot}=await import("https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore.js");
+    const app=initializeApp(firebaseConfig);
+    cloudRef=doc(getFirestore(app),"madplan",HOUSEHOLD_ID);
+    fsSetDoc=setDoc;
+    onSnapshot(cloudRef,snap=>{
+      if(!snap.exists())return;
+      const data=snap.data();
+      if(Array.isArray(data.sel)){
+        sel=new Set(data.sel);
+        try{localStorage.setItem("madplan_sel",JSON.stringify([...sel]));}catch(e){}
+      }
+      if(Array.isArray(data.liste)){
+        liste=data.liste;
+        try{localStorage.setItem("madplan_liste",JSON.stringify(liste));}catch(e){}
+      }
+      syncSelUI();
+      renderShop();
+    });
+  }catch(e){ console.warn("Cloud-sync kunne ikke starte (kører kun lokalt på denne enhed):",e); }
+}
+initCloud();
+function pushToCloud(){
+  if(!cloudRef||!fsSetDoc)return;
+  fsSetDoc(cloudRef,{sel:[...sel],liste:liste,updatedAt:Date.now()},{merge:true})
+    .catch(e=>console.warn("Kunne ikke synkronisere til skyen:",e));
+}
 
 function fmtQty(entries){
   // sum where same unit & numeric; else join
@@ -663,7 +708,7 @@ const shopList=document.getElementById("shopList"),shopCount=document.getElement
 const overBtn=document.getElementById("overBtn"),shopPantry=document.getElementById("shopPantry");
 const addN=document.getElementById("addN"),addQ=document.getElementById("addQ"),addC=document.getElementById("addC"),addBtn=document.getElementById("addBtn");
 const copyShopBtn=document.getElementById("copyShopBtn"),uncheckBtn=document.getElementById("uncheckBtn"),emptyBtn=document.getElementById("emptyBtn");
-function saveListe(){try{localStorage.setItem("madplan_liste",JSON.stringify(liste));}catch(e){}}
+function saveListe(){try{localStorage.setItem("madplan_liste",JSON.stringify(liste));}catch(e){} pushToCloud();}
 function collect(includePantry){const map={};D.filter(d=>sel.has(d.id)).forEach(d=>d.ing.forEach(i=>{if(!includePantry&&i.p)return;const k=i.n.toLowerCase();if(!map[k])map[k]={n:i.n,c:i.c,entries:[]};map[k].entries.push({q:i.q,u:i.u});}));return map;}
 function overfoer(){
   if(!sel.size){flash(overBtn,"Vælg retter først");return;}
