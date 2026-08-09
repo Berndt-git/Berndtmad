@@ -107,6 +107,9 @@
   .rcp-mini{font-size:.72rem;color:var(--muted);display:flex;flex-wrap:wrap;gap:3px 10px;margin-top:auto}
   .rcp-check{position:absolute;top:11px;right:11px;width:20px;height:20px;accent-color:var(--green);cursor:pointer;flex:none}
   .rcp-none{grid-column:1/-1;text-align:center;color:var(--muted);font-style:italic;padding:34px 0}
+  .rcp-group{grid-column:1/-1;font-size:.68rem;text-transform:uppercase;letter-spacing:1.3px;font-weight:700;
+    color:var(--green);border-bottom:2px solid var(--sage);padding-bottom:6px;margin:2px 2px 0}
+  .rcp-group .n{color:var(--muted);font-weight:600}
 
   /* ===== modal (opskrift) ===== */
   .modal-back{position:fixed;inset:0;background:rgba(28,38,33,.55);display:flex;align-items:flex-start;justify-content:center;
@@ -810,19 +813,27 @@ SLOTS_F.forEach(s=>{const b=document.createElement("button");b.className="pill"+
   b.addEventListener("click",()=>{rcpFilter=s;rcpPills.querySelectorAll(".pill").forEach(p=>p.classList.toggle("on",p.dataset.slot===s));renderRecipes();});
   rcpPills.appendChild(b);});
 rcpSearch.addEventListener("input",e=>{rcpQuery=e.target.value;renderRecipes();});
+function rcpCardHTML(d){const r=R[d.id]||{};
+  const mini=[d.pris+" kr",d.prot+" g P",d.fib+" g fib"]; if(r.tid)mini.push("~"+r.tid+" min");
+  return '<div class="rcp-card'+(sel.has(d.id)?" sel":"")+'" data-id="'+d.id+'">'+
+    '<input type="checkbox" class="rcp-check" title="Vælg til ugen"'+(sel.has(d.id)?" checked":"")+'>'+
+    '<div class="rcp-slot">'+esc(d.slot)+(d.dyr?' · <span class="rcp-dyr">dyr</span>':"")+'</div>'+
+    '<div class="rcp-name">'+esc(d.name)+'</div>'+
+    '<div class="rcp-mini">'+mini.map(m=>'<span>'+esc(m)+'</span>').join("")+'</div></div>';
+}
 function renderRecipes(){
   const q=rcpQuery.trim().toLowerCase();
   let items=D.filter(d=>rcpFilter==="Alle"||d.slot===rcpFilter);
   if(q)items=items.filter(d=>{const r=R[d.id]||{};return (d.name+" "+(r.t||"")+" "+((r.ing||[]).join(" "))).toLowerCase().includes(q);});
   if(!items.length){rcpGrid.innerHTML='<div class="rcp-none">Ingen retter matcher søgningen.</div>';return;}
-  rcpGrid.innerHTML=items.map(d=>{const r=R[d.id]||{};
-    const mini=[d.pris+" kr",d.prot+" g P",d.fib+" g fib"]; if(r.tid)mini.push("~"+r.tid+" min");
-    return '<div class="rcp-card'+(sel.has(d.id)?" sel":"")+'" data-id="'+d.id+'">'+
-      '<input type="checkbox" class="rcp-check" title="Vælg til ugen"'+(sel.has(d.id)?" checked":"")+'>'+
-      '<div class="rcp-slot">'+esc(d.slot)+(d.dyr?' · <span class="rcp-dyr">dyr</span>':"")+'</div>'+
-      '<div class="rcp-name">'+esc(d.name)+'</div>'+
-      '<div class="rcp-mini">'+mini.map(m=>'<span>'+esc(m)+'</span>').join("")+'</div></div>';
-  }).join("");
+  const chosen=items.filter(d=>sel.has(d.id)), rest=items.filter(d=>!sel.has(d.id));
+  let html="";
+  if(chosen.length){
+    html+='<div class="rcp-group">Valgt til ugen <span class="n">· '+chosen.length+'</span></div>'+chosen.map(rcpCardHTML).join("");
+    if(rest.length)html+='<div class="rcp-group">Øvrige retter</div>';
+  }
+  html+=rest.map(rcpCardHTML).join("");
+  rcpGrid.innerHTML=html;
   rcpGrid.querySelectorAll(".rcp-card").forEach(c=>{const id=c.dataset.id;
     c.addEventListener("click",e=>{if(e.target.classList.contains("rcp-check"))return;openRecipe(id);});
     const cb=c.querySelector(".rcp-check");
@@ -835,7 +846,7 @@ function renderRecipes(){
 function toggleDish(id,on){if(on)sel.add(id);else sel.delete(id);save();syncSelUI();}
 function syncSelUI(){
   document.querySelectorAll("#dishes .dish").forEach(row=>{const on=sel.has(row.dataset.id);row.classList.toggle("on",on);const cb=row.querySelector("input");if(cb)cb.checked=on;});
-  document.querySelectorAll(".rcp-card").forEach(c=>{const on=sel.has(c.dataset.id);c.classList.toggle("sel",on);const cb=c.querySelector(".rcp-check");if(cb)cb.checked=on;});
+  renderRecipes(); // genopbyg gitteret så valgte retter sorteres øverst
   render();
 }
 
